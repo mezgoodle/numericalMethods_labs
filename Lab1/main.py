@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib
+from matplotlib import cm
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 import cmath
@@ -85,4 +85,18 @@ y_line = np.sin(z_line)                                                   # Sin 
 ax.plot3D(x_line, y_line, z_line, 'gray')                                 # Add data to plot
 fig.savefig('graphic.png')                                                # Save graphic
 plt.show()                                                                # Show the plot
+
+# Another 3D graphic
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+# Make data.
+X = np.arange(-5, 5, 0.25)
+Y = np.arange(-5, 5, 0.25)
+X, Y = np.meshgrid(X, Y)
+Z = np.power(X, 2) + np.power(Y, 2)
+# Plot the surface.
+surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,
+                       linewidth=0, antialiased=False)
+fig.savefig('graphic.png')
+plt.show()
 """Graphs area end"""
