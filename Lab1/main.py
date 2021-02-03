@@ -10,7 +10,7 @@ from checker import main
 x = 12                                                                      # assigning value to a variable
 y = pow(x - 4, 2) + 5                                                       # assigning a calculation to a variable
 print(float(pow(x, y)) == np.power(12., 69.))                               # comparison
-print(y == np.sum([np.power(float(np.sum([x, -4])), 3.), 5]))
+print(y == np.sum([np.power(float(np.sum([x, -4])), 2.), 5]))
 """Simple functions area end"""
 
 """Math functions area start"""
@@ -18,7 +18,7 @@ print(3 + 4 - 5 == np.sum([3, 4, -5]))                                      # Su
 print(-1 * -4 == np.multiply(-1, -4), -1 * -4 == np.negative(-4))           # Multiply
 print(7 / 2 == np.divide(7, 2))                                             # Division
 print(3 + 3 / 5 == np.sum([3, np.divide(3, 5)]))
-print(math.factorial(7))                                                    # Factorial
+print(math.factorial(7) == np.math.factorial(7))                            # Factorial
 print(abs(-17) == np.abs(-17))                                              # Module
 print(math.sqrt(9) == np.sqrt(9))                                           # Radical
 print(pow(8, (1 / 3)) == np.power(float(8), float(np.divide(1, 3))))
@@ -38,7 +38,7 @@ print(f'The real part of complex number is : {z.real}')                     # Pr
 print(f'The imaginary part of complex number is : {z.imag}')                # Printing imaginary part of complex number
 print(np.iscomplex([z, z1, z2]))
 print(z + z1, np.iscomplex(z + z1))
-print(abs(z2))
+print(abs(z2) == np.math.abs(z2))
 """Complex numbers area end"""
 
 """Matrix area start"""
