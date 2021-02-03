@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 import cmath
 import math
 from checker import main
@@ -71,6 +72,17 @@ ax.set(xlabel='x', ylabel='y',                                            # Set 
        title='x * ln(x) - x')
 ax.grid()                                                                 # Set grid
 
-fig.savefig("graphic.png")                                                # Save graphic as image
+fig.savefig('graphic.png')                                                # Save graphic as image
+plt.show()                                                                # Show the plot
+
+# 3D graphic
+fig = plt.figure()
+ax = plt.axes(projection="3d")                                            # Set projection to 3d
+
+z_line = np.linspace(0, 15, 1000)                                         # Create data
+x_line = np.cos(z_line)                                                   # Cos from z
+y_line = np.sin(z_line)                                                   # Sin from z
+ax.plot3D(x_line, y_line, z_line, 'gray')                                 # Add data to plot
+fig.savefig('graphic.png')                                                # Save graphic
 plt.show()                                                                # Show the plot
 """Graphs area end"""
