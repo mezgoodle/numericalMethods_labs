@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
 import cmath
 import math
 from checker import main
@@ -56,3 +58,19 @@ print(np.linalg.det(a1))                                                  # Get 
 print(np.linalg.matrix_power(a1, 2))                                      # Raise in power matrix in NumPy
 print(np.dot(np.linalg.matrix_power(a1, -1), a1))
 """Matrix area end"""
+
+"""Graphs area start"""
+# 2D graphic
+t = np.arange(0.0, 10.01, 0.01)                                           # Data for plotting
+s = t * np.log(t) - t
+
+fig, ax = plt.subplots()                                                  # Get some variables from plot
+ax.plot(t, s)
+
+ax.set(xlabel='x', ylabel='y',                                            # Set labels
+       title='x * ln(x) - x')
+ax.grid()                                                                 # Set grid
+
+fig.savefig("graphic.png")                                                # Save graphic as image
+plt.show()                                                                # Show the plot
+"""Graphs area end"""
