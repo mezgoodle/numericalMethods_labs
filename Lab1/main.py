@@ -36,4 +36,22 @@ print(f'The imaginary part of complex number is : {z.imag}')              # Prin
 print(np.iscomplex([z, z1, z2]))
 print(z + z1, np.iscomplex(z + z1))
 print(abs(z2))
+
+"""Matrix"""
+a = [[1, 2],                                                              # Create matrix in Python
+     [3, 4]]
+a1 = np.matrix('1 2; 3 4')                                                # Create matrix in NumPy
+print(a == a1)
+
+value = 2                                                                 # Multiply number and matrix
+for i in range(len(a)):
+    for j in range(len(a[i])):
+        a[i][j] *= value
+a1 = main.increase_matrix(a1, value)
+print(a == a1)
+print(a * a1 == a1.dot(a1))
+print(a1.getT())                                                          # Transpose of the matrix in NumPy
+print(np.linalg.det(a1))                                                  # Get determinant of matrix in NumPy
+print(np.linalg.matrix_power(a1, 2))                                      # Raise in power matrix in NumPy
+print(np.dot(np.linalg.matrix_power(a1, -1), a1))
 # Calculating area end
