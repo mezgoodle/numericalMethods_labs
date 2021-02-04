@@ -38,7 +38,7 @@ print(f'The real part of complex number is : {z.real}')                     # Pr
 print(f'The imaginary part of complex number is : {z.imag}')                # Printing imaginary part of complex number
 print(np.iscomplex([z, z1, z2]))
 print(z + z1, np.iscomplex(z + z1))
-print(abs(z2) == np.math.abs(z2))
+print(abs(z2) == np.abs(z2))
 """Complex numbers area end"""
 
 """Matrix area start"""
@@ -77,7 +77,7 @@ ax.set(xlabel='x', ylabel='y',                                              # Se
        title='y=k/x')
 ax.grid()                                                                   # Set grid
 
-fig.savefig('graphic.png')                                                  # Save graphic as image
+fig.savefig('graphic1.png')                                                  # Save graphic as image
 plt.show()                                                                  # Show the plot
 
 # 3D graphic
@@ -88,7 +88,7 @@ z_line = np.linspace(0, 15, 1000)                                           # Cr
 x_line = np.sin(z_line)                                                     # Tg from z
 y_line = np.sin(z_line)                                                     # Sin from z
 ax.plot3D(x_line, y_line, z_line, 'gray')                                   # Add data to plot
-fig.savefig('graphic.png')                                                  # Save graphic
+fig.savefig('graphic2.png')                                                  # Save graphic
 plt.show()                                                                  # Show the plot
 
 # Another 3D graphic
@@ -102,6 +102,6 @@ Z = np.power(X, 3) + np.power(Y, 3)
 # Plot the surface.
 surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,
                        linewidth=0, antialiased=False)
-fig.savefig('graphic.png')
+fig.savefig('graphic3.png')
 plt.show()
 """Graphs area end"""
