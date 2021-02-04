@@ -58,6 +58,12 @@ print(a1.getT())                                                            # Ra
 print(np.dot(np.linalg.matrix_power(a1, -1), a1))
 """Matrix area end"""
 
+"""Vectors area start"""
+a = np.array([1, 2, 3])                                                     # Create the vectors
+b = np.array([3, 3, 2])
+print(np.vdot(a, b))                                                        # Scalar product
+"""Vectors area end"""
+
 """Graphs area start"""
 # 2D graphic
 k = 3
