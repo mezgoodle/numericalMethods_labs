@@ -23,9 +23,6 @@ def GausePrime(matrix: list) -> list:
     return matrix1
 
 
-matrix = [[3, 2, 1, 1, -2],
-          [1, -1, 4, -1, -1],
-          [-2, -2, -3, 1, 9],
-          [1, 5, -1, 2, 4]]
+matrix = [[1, 1, 1, 10], [2, 3, 4, 9], [4, 7, 8, 8]]
 print(matrix)
 print(GausePrime(matrix))
