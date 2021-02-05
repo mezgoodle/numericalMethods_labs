@@ -1,9 +1,9 @@
 import numpy as np
 
 
-def GausePrime(matrix: list) -> list:
+def methodGaussian(matrix: list) -> list:
     """
-    The function of prime Gause method.
+    The methodGaussian function.
     This function get matrix like this:
     [[A11X1 + A12X2 + A13X3+...+A1nXn=B1],
     [A21X1 + A22X2 + A23X3+...+a2nxn=B2],
@@ -31,4 +31,4 @@ def GausePrime(matrix: list) -> list:
 
 matrix = [[1, 1, 1, 10], [2, 3, 4, 9], [4, 7, 8, 8]]
 print(matrix)
-print(GausePrime(matrix))
+print(methodGaussian(matrix))
