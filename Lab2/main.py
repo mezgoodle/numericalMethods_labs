@@ -1,7 +1,6 @@
 import numpy as np
 
-
-def methodGaussian(matrix: list) -> list:
+def methodGaussian(start_matrix: list) -> list:
     """
     The methodGaussian function.
     This function get matrix like this:
@@ -12,31 +11,35 @@ def methodGaussian(matrix: list) -> list:
     [an1x1 + an2x2 + an3x3+...+annxn=bn]]
 
     Parameters:
-        matrix (list): The start matrix.
+        start_matrix (list): The start matrix.
 
     Returns:
-        List: The result matrix.
+        list: The result matrix.
     """
-    matrix1 = matrix.copy()
-    rows = len(matrix1)
-    columns = len(matrix1[0])
-    results = [None] * rows
+    final_matrix = start_matrix.copy()  # Create copy. Maybe we need start matrix later
+    rows = len(final_matrix)  # Get number or rows
+    columns = len(final_matrix[0])  # Get number of columns
+    results = [None] * rows  # Create list of results
+
+    # Main work through matrix
     for row in range(rows):
         for i in range(row+1, rows):
-            value = matrix1[i][row]/matrix1[row][row]
+            value = final_matrix[i][row] / final_matrix[row][row]
             for j in range(row, columns):
-                matrix1[i][j] = matrix1[i][j] + matrix1[row][j] * (-1) * value
+                final_matrix[i][j] = final_matrix[i][j] + final_matrix[row][j] * (-1) * value
 
-    print(matrix1)
+    print('Triangular matrix:', np.matrix(final_matrix))  # Print triangular matrix
+
+    # Search solutions
     for row in range(rows-1, -1, -1):
-        b = matrix1[row][columns-1]
+        b = final_matrix[row][columns-1]
         for row_ in range(row+1, columns-1):
-            b -= matrix1[row][row_] * results[row_]
-        x = b / matrix1[row][row]
-        results[row] = x
+            b -= final_matrix[row][row_] * results[row_]
+        x = b / final_matrix[row][row]
+        results[row] = round(x)
     return results
 
 
 matrix = [[3, 2, 1, 1, -2], [1, -1, 4, -1, -1], [-2, -2, -3, 1, 9], [1, 5, -1, 2, 4]]
-print(matrix)
-print(methodGaussian(matrix))
+print('Start matrix:', np.matrix(matrix))
+print('Solutions:', methodGaussian(matrix))
