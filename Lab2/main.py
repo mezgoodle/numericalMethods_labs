@@ -37,6 +37,6 @@ def methodGaussian(matrix: list) -> list:
     return results
 
 
-matrix = [[1, 1, 1, 10], [2, 3, 4, 9], [4, 7, 8, 8]]
+matrix = [[3, 2, 1, 1, -2], [1, -1, 4, -1, -1], [-2, -2, -3, 1, 9], [1, 5, -1, 2, 4]]
 print(matrix)
 print(methodGaussian(matrix))
