@@ -3,13 +3,19 @@ import numpy as np
 
 def GausePrime(matrix: list) -> list:
     """
-    [[a11x1 + a12x2 + a13x3+...+a1nxn=b1],
-    [a21x1 + a22x2 + a23x3+...+a2nxn=b2],
-    [a31x1 + a32x2 + a33x3+...+a3nxn=b3]
+    The function of prime Gause method.
+    This function get matrix like this:
+    [[A11X1 + A12X2 + A13X3+...+A1nXn=B1],
+    [A21X1 + A22X2 + A23X3+...+a2nxn=B2],
+    [A31X1 + A32X2 + A33X3+...+A3nXn=B3]
     ...
     [an1x1 + an2x2 + an3x3+...+annxn=bn]]
-    :param matrix:
-    :return matrix:
+
+    Parameters:
+        matrix (list): The start matrix.
+
+    Returns:
+        List: The result matrix.
     """
     results = []
     matrix1 = matrix.copy()
