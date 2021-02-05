@@ -9,7 +9,7 @@ def GausePrime(matrix: list) -> list:
     ...
     [an1x1 + an2x2 + an3x3+...+annxn=bn]]
     :param matrix:
-    :return:
+    :return matrix:
     """
     results = []
     matrix1 = matrix.copy()
@@ -17,14 +17,15 @@ def GausePrime(matrix: list) -> list:
     columns = len(matrix1[0])
     for row in range(rows):
         for i in range(row+1, rows):
-            for j in range(row+1, rows):
-                matrix1[i][j] = matrix1[i][j] - matrix1[row][j] * (matrix1[i][row] / matrix1[row][row])
-                print(matrix1)
-    # print(matrix1[3][4-1], matrix1[3][4])
-    # results.append(matrix1[n][n-1] / matrix1[n][n])
+            value = matrix1[i][row]/matrix1[row][row]
+            for j in range(row, columns):
+                matrix1[i][j] = matrix1[i][j] + matrix1[row][j] * (-1) * value
     return matrix1
 
 
-matrix = np.arange(1, 21).reshape(4, 5)
+matrix = [[3, 2, 1, 1, -2],
+          [1, -1, 4, -1, -1],
+          [-2, -2, -3, 1, 9],
+          [1, 5, -1, 2, 4]]
 print(matrix)
 print(GausePrime(matrix))
