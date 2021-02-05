@@ -56,6 +56,7 @@ print(a == a1)
 print(a * a1 == a1.dot(a1))
 print(a1.getT())                                                            # Raise in power matrix in NumPy
 print(np.dot(np.linalg.matrix_power(a1, -1), a1))
+print(np.linalg.det(a))                                                     # Print determination
 """Matrix area end"""
 
 """Vectors area start"""

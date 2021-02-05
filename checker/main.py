@@ -15,11 +15,3 @@ def get_product(n, value):
     for x in range(n):
         result = np.multiply(result, np.sum([x, 1]))
     return result
-
-
-def increase_matrix(matrix, value):
-    """Multiply matrix with value"""
-    for i in range(len(matrix)):
-        for j in range(len(matrix[i])):
-            matrix[i][j] = np.multiply(matrix[i][j], value)
-    return matrix
