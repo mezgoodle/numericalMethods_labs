@@ -17,16 +17,24 @@ def methodGaussian(matrix: list) -> list:
     Returns:
         List: The result matrix.
     """
-    results = []
     matrix1 = matrix.copy()
     rows = len(matrix1)
     columns = len(matrix1[0])
+    results = [None] * rows
     for row in range(rows):
         for i in range(row+1, rows):
             value = matrix1[i][row]/matrix1[row][row]
             for j in range(row, columns):
                 matrix1[i][j] = matrix1[i][j] + matrix1[row][j] * (-1) * value
-    return matrix1
+
+    print(matrix1)
+    for row in range(rows-1, -1, -1):
+        b = matrix1[row][columns-1]
+        for row_ in range(row+1, columns-1):
+            b -= matrix1[row][row_] * results[row_]
+        x = b / matrix1[row][row]
+        results[row] = x
+    return results
 
 
 matrix = [[1, 1, 1, 10], [2, 3, 4, 9], [4, 7, 8, 8]]
