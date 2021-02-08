@@ -78,10 +78,10 @@ a = [[8.0, 3.22, 0.8, 0.0, 4.1],
      [0.0, 1.91, 1.0, 7.5, 1.03],
      [4.1, -1.03, 3.02, 1.03, 6.44]]
 b = [9.45, -12.2, 7.78, -8.1, 10.0]
+print('Matrix a:', np.matrix(a))
+print('Matrix b:', np.matrix(b))
 L = cholesky_decomposition(a)
-print(L)
-print()
 x = solveLU(L, get_transpose(L), b)
-print(x)
+print('Solution vector:', x)
 
-print(np.linalg.solve(a, b))
+print('NumPy solution:', np.linalg.solve(a, b))
