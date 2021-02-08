@@ -22,7 +22,6 @@ def cholesky_decomposition(a: list) -> list:
     :param a: start matrix
     :return: Lower-triangular matrix
     """
-    a = np.array(a, float)
     L = np.zeros_like(a)
     n = len(a)
     for j in range(n):
@@ -48,9 +47,6 @@ def solveLU(L: list, U: list, b: list) -> list:
     :param b: matrix B
     :return: vector x, the solution
     """
-    L = np.array(L, float)
-    U = np.array(U, float)
-    b = np.array(b, float)
     n = len(L)
     y = np.zeros(n)
     x = np.zeros(n)
@@ -81,7 +77,8 @@ b = [9.45, -12.2, 7.78, -8.1, 10.0]
 print('Matrix a:', np.matrix(a))
 print('Matrix b:', np.matrix(b))
 L = cholesky_decomposition(a)
-x = solveLU(L, get_transpose(L), b)
+U = get_transpose(L)
+x = solveLU(L, U, b)
 print('Solution vector:', x)
 
 print('NumPy solution:', np.linalg.solve(a, b))

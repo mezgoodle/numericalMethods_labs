@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def methodGaussian(start_matrix: list) -> list:
     """
     The methodGaussian function.
@@ -16,7 +17,7 @@ def methodGaussian(start_matrix: list) -> list:
     Returns:
         list: The result matrix.
     """
-    final_matrix = start_matrix.copy()  # Create copy. Maybe we need start matrix later
+    final_matrix = start_matrix.copy()  # Create copy.
     rows = len(final_matrix)  # Get number or rows
     columns = len(final_matrix[0])  # Get number of columns
     results = [None] * rows  # Create list of results
