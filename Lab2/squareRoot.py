@@ -2,6 +2,20 @@ import numpy as np
 from math import sqrt
 
 
+def get_transpose(matrix: list) -> list:
+    """
+    Function for getting transpose matrix
+    :param matrix: input matrix
+    :return: transpose input matrix
+    """
+    matrixT = matrix.copy()
+    n = len(matrixT)
+    for i in range(n):
+        for j in range(i, n):
+            matrixT[i][j], matrixT[j][i] = matrixT[j][i], matrixT[i][j]
+    return matrixT
+
+
 def cholesky_decomposition(a: list) -> list:
     """
     Cholesky decomposition
@@ -67,7 +81,7 @@ b = [9.45, -12.2, 7.78, -8.1, 10.0]
 L = cholesky_decomposition(a)
 print(L)
 print()
-x = solveLU(L, np.transpose(L), b)
+x = solveLU(L, get_transpose(L), b)
 print(x)
 
 print(np.linalg.solve(a, b))
