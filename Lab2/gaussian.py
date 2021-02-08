@@ -41,5 +41,8 @@ def methodGaussian(start_matrix: list) -> list:
 
 
 matrix = [[3, 2, 1, 1, -2], [1, -1, 4, -1, -1], [-2, -2, -3, 1, 9], [1, 5, -1, 2, 4]]
+a = [[3, 2, 1, 1], [1, -1, 4, -1], [-2, -2, -3, 1], [1, 5, -1, 2]]
+b = [-2, -1, 9, 4]
 print('Start matrix:', np.matrix(matrix))
 print('Solutions:', methodGaussian(matrix))
+print('NumPy solution:', np.linalg.solve(a, b))
