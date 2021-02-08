@@ -19,6 +19,8 @@ There are main files, that used in every lab
 ## Labs list
 
 * [First lab](https://github.com/mezgoodle/numericalMethods_labs/tree/master/Lab1)
+  
+* [Second lab](https://github.com/mezgoodle/numericalMethods_labs/tree/master/Lab2)
 
 ## Note
 
