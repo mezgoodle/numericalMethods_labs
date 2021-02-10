@@ -59,9 +59,9 @@ def solveLU(L: list, U: list, b: list) -> list:
         y[i] = (b[i] - sumj) / L[i][i]
     print('matrix y:', y)
     # backward substitution
-    for i in range(n-1, -1, -1):
+    for i in range(n - 1, -1, -1):
         sumj = 0
-        for j in range(i+1, n):
+        for j in range(i + 1, n):
             sumj += U[i][j] * x[j]
         x[i] = (y[i] - sumj) / U[i][i]
 
@@ -79,5 +79,6 @@ U = get_transpose(T)
 print('matrix T-transpose:', U)
 x = solveLU(T, U, b)
 print('Solution vector:', x)
-
+print('Residual vector', np.matrix(np.subtract(b, np.dot(a, x)), int))
 print('NumPy solution:', np.linalg.solve(a, b))
+print('Residual vector', np.matrix(np.subtract(b, np.dot(a, np.linalg.solve(a, b))), int))
