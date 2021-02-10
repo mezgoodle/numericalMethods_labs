@@ -28,7 +28,7 @@ def methodGaussian(start_matrix: list) -> list:
             value = final_matrix[i][row] / final_matrix[row][row]
             for j in range(row, columns):
                 final_matrix[i][j] = final_matrix[i][j] + final_matrix[row][j] * (-1) * value
-
+        print('Matrix:', np.matrix(final_matrix))
     print('Triangular matrix:', np.matrix(final_matrix))  # Print triangular matrix
 
     # Search solutions
@@ -38,6 +38,7 @@ def methodGaussian(start_matrix: list) -> list:
             b -= final_matrix[row][row_] * results[row_]
         x = b / final_matrix[row][row]
         results[row] = round(x)
+        print('Results:', results)
     return results
 
 

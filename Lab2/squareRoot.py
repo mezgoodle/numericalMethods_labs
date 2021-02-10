@@ -22,21 +22,21 @@ def cholesky_decomposition(a: list) -> list:
     :param a: start matrix
     :return: Lower-triangular matrix
     """
-    L = np.zeros_like(a)
+    T = np.zeros_like(a)
     n = len(a)
     for j in range(n):
         for i in range(j, n):
             if i == j:
                 sumK = 0
                 for k in range(j):
-                    sumK += L[i][k] ** 2
-                L[i][j] = sqrt(a[i][j] - sumK)
+                    sumK += T[i][k] ** 2
+                T[i][j] = sqrt(a[i][j] - sumK)
             else:
                 sumK = 0
                 for k in range(j):
-                    sumK += L[i][k] * L[j][k]
-                L[i][j] = (a[i][j] - sumK) / L[j][j]
-    return L
+                    sumK += T[i][k] * T[j][k]
+                T[i][j] = (a[i][j] - sumK) / T[j][j]
+    return T
 
 
 def solveLU(L: list, U: list, b: list) -> list:
@@ -57,7 +57,7 @@ def solveLU(L: list, U: list, b: list) -> list:
         for j in range(i):
             sumj += L[i][j] * y[j]
         y[i] = (b[i] - sumj) / L[i][i]
-
+    print('matrix y:', y)
     # backward substitution
     for i in range(n-1, -1, -1):
         sumj = 0
@@ -73,11 +73,11 @@ a = [[1.0, 0.42, 0.54, 0.66],
      [0.54, 0.32, 1.0, 0.22],
      [0.66, 0.44, 0.22, 1.0]]
 b = [0.3, 0.5, 0.7, 0.9]
-print('Matrix a:', np.matrix(a))
-print('Matrix b:', np.matrix(b))
-L = cholesky_decomposition(a)
-U = get_transpose(L)
-x = solveLU(L, U, b)
+T = cholesky_decomposition(a)
+print('matrix T:', T)
+U = get_transpose(T)
+print('matrix T-transpose:', U)
+x = solveLU(T, U, b)
 print('Solution vector:', x)
 
 print('NumPy solution:', np.linalg.solve(a, b))
