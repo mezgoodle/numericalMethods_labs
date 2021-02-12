@@ -16,6 +16,49 @@ def get_transpose(matrix: list) -> list:
     return matrixT
 
 
+def subtract(a: list, b: list) -> list:
+    """
+    Function for substracting two matrices
+    :param a: the first input matrix
+    :param b: the second input matrix
+    :return: the result matrix
+    """
+    result = a.copy()
+
+    for i in range(len(a)):
+        for j in range(len(a[0])):
+            result[i][j] = a[i][j] - b[i][j]
+
+    return result
+
+
+def multiply(a: list, b: list) -> list:
+    """
+    array([[11, 20,  3],
+        [ 9,  9,  8]])
+
+    Function for multiplying two matrices
+    :param a: the first input matrix A[i][j]
+    :param b: the second input matrix B[m][n]
+    :return: the result matrix C[i][n]
+    """
+    result = []
+    # Creating result by sizes
+    for _ in range(len(a)):
+        array = [0] * len(b[0])
+        result.append(array)
+
+    if len(a[0]) == len(b):  # j == m
+        for i in range(len(a)):
+            for j in range(len(b[0])):
+                for k in range(len(b)):
+                    result[i][j] += a[i][k] * b[k][j]
+    else:
+        raise ValueError('j != m')
+
+    return result
+
+
 def cholesky_decomposition(a: list) -> list:
     """
     Cholesky decomposition
@@ -39,7 +82,7 @@ def cholesky_decomposition(a: list) -> list:
     return T
 
 
-def solveLU(L: list, U: list, b: list) -> list:
+def solve(L: list, U: list, b: list) -> list:
     """
     The solve main function
     :param L: Lower-triangular matrix
@@ -77,7 +120,7 @@ T = cholesky_decomposition(a)
 print('matrix T:', T)
 U = get_transpose(T)
 print('matrix T-transpose:', U)
-x = solveLU(T, U, b)
+x = solve(T, U, b)
 print('Solution vector:', x)
 print('Residual vector', np.matrix(np.subtract(b, np.dot(a, x)), int))
 print('NumPy solution:', np.linalg.solve(a, b))
