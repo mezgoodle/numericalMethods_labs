@@ -8,107 +8,104 @@ def get_transpose(matrix: list) -> list:
     :param matrix: input matrix
     :return: transpose input matrix
     """
-    matrixT = matrix.copy()
-    n = len(matrixT)
+    matrix_t = matrix.copy()
+    n = len(matrix_t)
     for i in range(n):
         for j in range(i, n):
-            matrixT[i][j], matrixT[j][i] = matrixT[j][i], matrixT[i][j]
-    return matrixT
+            matrix_t[i][j], matrix_t[j][i] = matrix_t[j][i], matrix_t[i][j]
+    return matrix_t
 
 
-def subtract(a: list, b: list) -> list:
+def subtract(matrix_a: list, matrix_b: list) -> list:
     """
     Function for substracting two matrices
-    :param a: the first input matrix
-    :param b: the second input matrix
+    :param matrix_a: the first input matrix
+    :param matrix_b: the second input matrix
     :return: the result matrix
     """
-    result = a.copy()
+    result = matrix_a.copy()
 
-    for i in range(len(a)):
-        for j in range(len(a[0])):
-            result[i][j] = a[i][j] - b[i][j]
+    for i in range(len(matrix_a)):
+        for j in range(len(matrix_a[0])):
+            result[i][j] = matrix_a[i][j] - matrix_b[i][j]
 
     return result
 
 
-def multiply(a: list, b: list) -> list:
+def multiply(matrix_a: list, matrix_b: list) -> list:
     """
-    array([[11, 20,  3],
-        [ 9,  9,  8]])
-
     Function for multiplying two matrices
-    :param a: the first input matrix A[i][j]
-    :param b: the second input matrix B[m][n]
+    :param matrix_a: the first input matrix A[i][j]
+    :param matrix_b: the second input matrix B[m][n]
     :return: the result matrix C[i][n]
     """
     result = []
     # Creating result by sizes
-    for _ in range(len(a)):
-        array = [0] * len(b[0])
+    for _ in range(len(matrix_a)):
+        array = [0] * len(matrix_b[0])
         result.append(array)
 
-    if len(a[0]) == len(b):  # j == m
-        for i in range(len(a)):
-            for j in range(len(b[0])):
-                for k in range(len(b)):
-                    result[i][j] += a[i][k] * b[k][j]
+    if len(matrix_a[0]) == len(matrix_b):  # j == m
+        for i in range(len(matrix_a)):
+            for j in range(len(matrix_b[0])):
+                for k in range(len(matrix_b)):
+                    result[i][j] += matrix_a[i][k] * matrix_b[k][j]
     else:
         raise ValueError('j != m')
 
     return result
 
 
-def cholesky_decomposition(a: list) -> list:
+def factorization(matrix_a: list) -> list:
     """
     Cholesky decomposition
-    :param a: start matrix
+    :param matrix_a: start matrix
     :return: Lower-triangular matrix
     """
-    T = np.zeros_like(a)
-    n = len(a)
+    t = np.zeros_like(matrix_a)
+    n = len(matrix_a)
     for j in range(n):
         for i in range(j, n):
             if i == j:
-                sumK = 0
+                sum_k = 0
                 for k in range(j):
-                    sumK += T[i][k] ** 2
-                T[i][j] = sqrt(a[i][j] - sumK)
+                    sum_k += t[i][k] ** 2
+                t[i][j] = sqrt(matrix_a[i][j] - sum_k)
             else:
-                sumK = 0
+                sum_k = 0
                 for k in range(j):
-                    sumK += T[i][k] * T[j][k]
-                T[i][j] = (a[i][j] - sumK) / T[j][j]
-    return T
+                    sum_k += t[i][k] * t[j][k]
+                t[i][j] = (matrix_a[i][j] - sum_k) / t[j][j]
+    return t
 
 
-def solve(L: list, U: list, b: list) -> list:
+def solve(lower_matrix: list, upper_matrix: list, vector_b: list) -> list:
     """
     The solve main function
-    :param L: Lower-triangular matrix
-    :param U: Upper-triangular matrix
-    :param b: matrix B
+    :param lower_matrix: Lower-triangular matrix
+    :param upper_matrix: Upper-triangular matrix
+    :param vector_b: vector B
     :return: vector x, the solution
     """
-    n = len(L)
+    n = len(lower_matrix)
     y = np.zeros(n)
-    x = np.zeros(n)
+    vector_x = np.zeros(n)
 
     # forward substitution
     for i in range(n):
-        sumj = 0
+        sum_j = 0
         for j in range(i):
-            sumj += L[i][j] * y[j]
-        y[i] = (b[i] - sumj) / L[i][i]
+            sum_j += lower_matrix[i][j] * y[j]
+        y[i] = (vector_b[i] - sum_j) / lower_matrix[i][i]
     print('matrix y:', y)
     # backward substitution
     for i in range(n - 1, -1, -1):
-        sumj = 0
+        sum_j = 0
         for j in range(i + 1, n):
-            sumj += U[i][j] * x[j]
-        x[i] = (y[i] - sumj) / U[i][i]
+            sum_j += upper_matrix[i][j] * vector_x[j]
+        vector_x[i] = (y[i] - sum_j) / upper_matrix[i][i]
 
-    return x
+    return vector_x
 
 
 a = [[1.0, 0.42, 0.54, 0.66],
@@ -116,7 +113,7 @@ a = [[1.0, 0.42, 0.54, 0.66],
      [0.54, 0.32, 1.0, 0.22],
      [0.66, 0.44, 0.22, 1.0]]
 b = [0.3, 0.5, 0.7, 0.9]
-T = cholesky_decomposition(a)
+T = factorization(a)
 print('matrix T:', T)
 U = get_transpose(T)
 print('matrix T-transpose:', U)
