@@ -108,6 +108,21 @@ def solve(lower_matrix: list, upper_matrix: list, vector_b: list) -> list:
     return vector_x
 
 
+def get_fault(x: list, xm: list) -> float:
+    """
+    Function for finding get_fault
+    :param x: my solution vector
+    :param xm: NumPy solution vector
+    :return: fault
+    """
+    sum_k = 0
+    n = len(x)
+    for k in range(1, n):
+        sum_k += (x[k] - xm[k]) ** 2
+    result = sqrt(sum_k / n)
+    return result
+
+
 a = [[1.0, 0.42, 0.54, 0.66],
      [0.42, 1.0, 0.32, 0.44],
      [0.54, 0.32, 1.0, 0.22],
@@ -118,7 +133,9 @@ print('matrix T:', T)
 U = get_transpose(T)
 print('matrix T-transpose:', U)
 x = solve(T, U, b)
+xm = np.linalg.solve(a, b)
 print('Solution vector:', x)
 print('Residual vector', np.matrix(np.subtract(b, np.dot(a, x)), int))
-print('NumPy solution:', np.linalg.solve(a, b))
+print('NumPy solution:', xm)
 print('Residual vector', np.matrix(np.subtract(b, np.dot(a, np.linalg.solve(a, b))), int))
+print('Fault:', round(get_fault(x, xm)))
