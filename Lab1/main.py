@@ -78,7 +78,7 @@ ax.set(xlabel='x', ylabel='y',                                              # Se
        title='y=k/x')
 ax.grid()                                                                   # Set grid
 
-fig.savefig('Lab1/graphic1.png')                                                  # Save graphic as image
+fig.savefig('Lab1/graphic1.png')                                            # Save graphic as image
 plt.show()                                                                  # Show the plot
 
 # 3D graphic
@@ -89,7 +89,7 @@ z_line = np.linspace(0, 15, 1000)                                           # Cr
 x_line = np.sin(z_line)                                                     # Tg from z
 y_line = np.sin(z_line)                                                     # Sin from z
 ax.plot3D(x_line, y_line, z_line, 'gray')                                   # Add data to plot
-fig.savefig('Lab1/graphic2.png')                                                  # Save graphic
+fig.savefig('Lab1/graphic2.png')                                            # Save graphic
 plt.show()                                                                  # Show the plot
 
 # Another 3D graphic
