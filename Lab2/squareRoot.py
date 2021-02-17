@@ -97,7 +97,7 @@ def solve(lower_matrix: list, upper_matrix: list, vector_b: list) -> list:
         for j in range(i):
             sum_j += lower_matrix[i][j] * y[j]
         y[i] = (vector_b[i] - sum_j) / lower_matrix[i][i]
-    print('matrix y:', y)
+    print('Vector y:', y)
     # backward substitution
     for i in range(n - 1, -1, -1):
         sum_j = 0
