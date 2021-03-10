@@ -46,7 +46,7 @@ def solve_jacobi(matrix_a: list, vector_b: list, epsilon=10 ** (-6)) -> list:
             if tmp < 3:
                 print(f'Temporary result: {solution_vector}')
                 tmp += 1
-            print(f'Residual vector: {np.matrix(np.subtract(b, np.dot(a, solution_vector)), float)}')
+            print(f'Residual vector: {np.matrix(np.subtract(vector_b, np.dot(matrix_a, solution_vector)), float)}')
             iterations += 1
     print(f'Iterations: {iterations}')
     return solution_vector

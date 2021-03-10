@@ -35,6 +35,7 @@ def solve(matrix_a: list, vector_b: list, vector_x: list, eps=10 ** (-6)) -> lis
     :return:
     """
     iterations = 0
+    tmp = 0
     while True:
         errors = []
         new_x = seidel(matrix_a, vector_b, vector_x)
@@ -42,8 +43,13 @@ def solve(matrix_a: list, vector_b: list, vector_x: list, eps=10 ** (-6)) -> lis
             errors.append(abs(new_x[i] - vector_x[i]))
         vector_x = new_x
         if max(errors) < eps:
+            print(f'Last result: {vector_x}')
             break
         else:
+            if tmp < 3:
+                print(f'Temporary result: {vector_x}')
+                tmp += 1
+            print(f'Residual vector: {np.matrix(np.subtract(vector_b, np.dot(matrix_a, vector_x)), float)}')
             iterations += 1
     print(f'Iterations: {iterations}')
     return vector_x
