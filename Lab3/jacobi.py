@@ -1,4 +1,5 @@
 import numpy as np
+from math import sqrt
 
 
 def solve_jacobi(matrix_a: list, vector_b: list, epsilon=10 ** (-6)) -> list:
@@ -27,6 +28,7 @@ def solve_jacobi(matrix_a: list, vector_b: list, epsilon=10 ** (-6)) -> list:
         matrix_c.append(element_c)
 
     iterations = 0
+    tmp = 0
     # Start the main algorithm
     while True:
         divs = []
@@ -37,12 +39,32 @@ def solve_jacobi(matrix_a: list, vector_b: list, epsilon=10 ** (-6)) -> list:
             solution_vector[i] = x_next
         # Check if we need to stop
         if max(divs) < epsilon:
+            print(f'Last result: {solution_vector}')
             # It's time to stop!
             break
         else:
+            if tmp < 3:
+                print(f'Temporary result: {solution_vector}')
+                tmp += 1
+            print(f'Residual vector: {np.matrix(np.subtract(b, np.dot(a, solution_vector)), float)}')
             iterations += 1
     print(f'Iterations: {iterations}')
     return solution_vector
+
+
+def get_fault(x: list, xm: list) -> float:
+    """
+    Function for finding get_fault
+    :param x: my solution vector
+    :param xm: NumPy solution vector
+    :return: fault
+    """
+    sum_k = 0
+    n = len(x)
+    for k in range(1, n):
+        sum_k += (x[k] - xm[k]) ** 2
+    result = sqrt(sum_k / n)
+    return result
 
 
 a = [[2.12, 0.42, 1.34, 0.88],
@@ -53,5 +75,9 @@ b = [11.172, 0.115, 0.009, 9.349]
 print(f'Matrix A:', np.matrix(a))
 print(f'Vector b:', b)
 sol = solve_jacobi(a.copy(), b.copy())
+sol_np = np.linalg.solve(a, b)
 print(f'Our solution: {np.matrix(sol)}')
-print(f'NumPy solution: {np.linalg.solve(a, b)}')
+print(f'NumPy solution: {sol_np}')
+print(f'Residual vector: {np.matrix(np.subtract(b, np.dot(a, sol)), int)}')
+print(f'Residual vector for NumPy: {np.matrix(np.subtract(b, np.dot(a, sol_np)), int)}')
+print('Fault:', round(get_fault(sol, sol_np), 6))
