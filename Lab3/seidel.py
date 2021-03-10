@@ -1,4 +1,5 @@
 import numpy as np
+from checker.fault import get_fault
 
 
 # Defining our function as seidel which takes 3 arguments
@@ -44,7 +45,7 @@ def solve(matrix_a: list, vector_b: list, vector_x: list, eps=10 ** (-6)) -> lis
             break
         else:
             iterations += 1
-    print(f'Iterations: ', iterations)
+    print(f'Iterations: {iterations}')
     return vector_x
 
 
@@ -55,6 +56,9 @@ a = [[2.12, 0.42, 1.34, 0.88],
 b = [11.172, 0.115, 0.009, 9.349]
 x = [0 for _ in range(len(a[0]))]
 x = solve(a.copy(), b.copy(), x.copy())
-print(x)
-
-print(np.linalg.solve(a, b))
+print(f'Our solution: {x}')
+x_np = np.linalg.solve(a, b)
+print(f'NumPy solution: {x_np}')
+print(f'Residual vector: {np.matrix(np.subtract(b, np.dot(a, x)), int)}')
+print(f'Residual vector for NumPy: {np.matrix(np.subtract(b, np.dot(a, x_np)), int)}')
+print('Fault:', round(get_fault(x, x_np), 6))

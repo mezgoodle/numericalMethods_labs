@@ -1,5 +1,5 @@
 import numpy as np
-from math import sqrt
+from checker.fault import get_fault
 
 
 def solve_jacobi(matrix_a: list, vector_b: list, epsilon=10 ** (-6)) -> list:
@@ -50,21 +50,6 @@ def solve_jacobi(matrix_a: list, vector_b: list, epsilon=10 ** (-6)) -> list:
             iterations += 1
     print(f'Iterations: {iterations}')
     return solution_vector
-
-
-def get_fault(x: list, xm: list) -> float:
-    """
-    Function for finding get_fault
-    :param x: my solution vector
-    :param xm: NumPy solution vector
-    :return: fault
-    """
-    sum_k = 0
-    n = len(x)
-    for k in range(1, n):
-        sum_k += (x[k] - xm[k]) ** 2
-    result = sqrt(sum_k / n)
-    return result
 
 
 a = [[2.12, 0.42, 1.34, 0.88],
