@@ -24,7 +24,7 @@ def methodGaussian(start_matrix: list) -> list:
 
     # Main work through matrix
     for row in range(rows):
-        for i in range(row+1, rows):
+        for i in range(row + 1, rows):
             value = final_matrix[i][row] / final_matrix[row][row]
             for j in range(row, columns):
                 final_matrix[i][j] = final_matrix[i][j] + final_matrix[row][j] * (-1) * value
@@ -32,9 +32,9 @@ def methodGaussian(start_matrix: list) -> list:
     print('Triangular matrix:', np.matrix(final_matrix))  # Print triangular matrix
 
     # Search solutions
-    for row in range(rows-1, -1, -1):
-        b = final_matrix[row][columns-1]
-        for row_ in range(row+1, columns-1):
+    for row in range(rows - 1, -1, -1):
+        b = final_matrix[row][columns - 1]
+        for row_ in range(row + 1, columns - 1):
             b -= final_matrix[row][row_] * results[row_]
         x = b / final_matrix[row][row]
         results[row] = round(x)
