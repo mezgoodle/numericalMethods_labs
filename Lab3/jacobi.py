@@ -1,6 +1,8 @@
 import numpy as np
 from checker.fault import get_fault
 
+np.set_printoptions(suppress=True)
+
 
 def solve_jacobi(matrix_a: list, vector_b: list, epsilon=10 ** (-6)) -> list:
     """
@@ -53,16 +55,17 @@ def solve_jacobi(matrix_a: list, vector_b: list, epsilon=10 ** (-6)) -> list:
 
 
 a = [[4.4944, 0.1764, 1.7956, 0.7744],
-      [0.1764, 15.6025, 3.4969, 0.1849],
-      [1.7956, 3.4969, 8.8804, 0.2116],
-      [0.7744, 0.1849, 0.2116, 19.7136]]
-b = [31.97212,  9.18339, 19.51289, 51.39451]
+     [0.1764, 15.6025, 3.4969, 0.1849],
+     [1.7956, 3.4969, 8.8804, 0.2116],
+     [0.7744, 0.1849, 0.2116, 19.7136]]
+b = [31.97212, 9.18339, 19.51289, 51.39451]
 print(f'Matrix A:', np.matrix(a))
 print(f'Vector b:', b)
 sol = solve_jacobi(a.copy(), b.copy())
 sol_np = np.linalg.solve(a, b)
 print(f'Our solution: {np.matrix(sol)}')
 print(f'NumPy solution: {sol_np}')
-print(f'Residual vector: {np.matrix(np.subtract(b, np.dot(a, sol)), int)}')
-print(f'Residual vector for NumPy: {np.matrix(np.subtract(b, np.dot(a, sol_np)), int)}')
+
+print(f'Residual vector: {np.matrix(np.subtract(b, np.dot(a, sol)))}')
+print(f'Residual vector for NumPy: {np.matrix(np.subtract(b, np.dot(a, sol_np)))}')
 print('Fault:', round(get_fault(sol, sol_np), 6))

@@ -1,6 +1,8 @@
 import numpy as np
 from checker.fault import get_fault
 
+np.set_printoptions(suppress=True)
+
 
 # Defining our function as seidel which takes 3 arguments
 # as A matrix, Solution and B matrix
@@ -56,10 +58,10 @@ def solve(matrix_a: list, vector_b: list, vector_x: list, eps=10 ** (-6)) -> lis
 
 
 a = [[4.4944, 0.1764, 1.7956, 0.7744],
-      [0.1764, 15.6025, 3.4969, 0.1849],
-      [1.7956, 3.4969, 8.8804, 0.2116],
-      [0.7744, 0.1849, 0.2116, 19.7136]]
-b = [31.97212,  9.18339, 19.51289, 51.39451]
+     [0.1764, 15.6025, 3.4969, 0.1849],
+     [1.7956, 3.4969, 8.8804, 0.2116],
+     [0.7744, 0.1849, 0.2116, 19.7136]]
+b = [31.97212, 9.18339, 19.51289, 51.39451]
 x = [0 for _ in range(len(a[0]))]
 x = solve(a.copy(), b.copy(), x.copy())
 print(f'Our solution: {x}')
