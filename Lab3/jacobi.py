@@ -41,12 +41,12 @@ def solve_jacobi(matrix_a: list, vector_b: list, epsilon=10 ** (-6)) -> list:
             solution_vector[i] = x_next
         # Check if we need to stop
         if max(divs) < epsilon:
-            print(f'Last result: {solution_vector}')
+            print(f'Last result: {np.matrix(solution_vector).round(6)}')
             # It's time to stop!
             break
         else:
             if tmp < 3:
-                print(f'Temporary result: {solution_vector}')
+                print(f'Temporary result: {np.matrix(solution_vector).round(6)}')
                 tmp += 1
             print(f'Residual vector: {np.matrix(np.subtract(vector_b, np.dot(matrix_a, solution_vector)), float).round(6)}')
             iterations += 1
