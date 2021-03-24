@@ -3,11 +3,38 @@ import numpy as np
 np.set_printoptions(suppress=True)
 
 a = [
-    [6.26, 1.1, 0.97, 1.24],
-    [1.1, 4.16, 1.3, 0.16],
-    [0.97, 1.3, 5.44, 2.1],
-    [1.24, 0.16, 2.1, 6.1]
+    [2.2, 1, 0.5, 2],
+    [1, 1.3, 2, 1],
+    [0.5, 2, 0.5, 1.6],
+    [2, 1, 1.6, 2]
 ]
+
+
+def algorithm(matrix: list) -> list:
+    """
+    Get a Frubenius form
+    :param matrix:
+    :return:
+    """
+    length = len(matrix)
+    for i in range(length-1, 0, -1):
+        matrix_b = np.zeros((length, length))
+        np.fill_diagonal(matrix_b, 1)
+        matrix_b_minus = matrix_b.copy()
+
+        # Fill matrix b and minus one b
+        for j in range(length):
+            if j == i-1:
+                matrix_b[i - 1][j] = 1 / matrix[i][i-1]
+            else:
+                matrix_b[i-1][j] = matrix[i][j] / matrix[i][i-1] * (-1)
+            matrix_b_minus[i-1][j] = matrix[i][j]
+        matrix = np.dot(matrix_b_minus, np.dot(matrix, matrix_b))
+    return matrix
+
+
+result = algorithm(a.copy())
+
 
 print('Matrix A:')
 print(np.matrix(a))
@@ -73,3 +100,5 @@ print(b3_minus)
 temp = np.dot(b3_minus, np.dot(temp, b3))
 print('Matrix temp:')
 print(temp)
+print('Result:')
+print(result)
