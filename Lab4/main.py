@@ -17,6 +17,8 @@ np.fill_diagonal(b, 1)
 b1_minus = b.copy()
 b2 = b.copy()
 b2_minus = b.copy()
+b3 = b.copy()
+b3_minus = b.copy()
 
 b[2][0] = a[3][0] / a[3][2] * (-1)
 b[2][1] = a[3][1] / a[3][2] * (-1)
@@ -51,5 +53,23 @@ print('Matrix B2-1:')
 print(b2_minus)
 
 temp = np.dot(b2_minus, np.dot(temp, b2))
+print('Matrix temp:')
+print(temp)
+
+b3[0][0] = 1 / temp[1][0]
+b3[0][1] = temp[1][1] / temp[1][0] * (-1)
+b3[0][2] = temp[1][2] / temp[1][0] * (-1)
+b3[0][3] = temp[1][3] / temp[1][0] * (-1)
+print('Matrix B3:')
+print(b3)
+
+b3_minus[0][0] = temp[1][0]
+b3_minus[0][1] = temp[1][1]
+b3_minus[0][2] = temp[1][2]
+b3_minus[0][3] = temp[1][3]
+print('Matrix B3-1:')
+print(b3_minus)
+
+temp = np.dot(b3_minus, np.dot(temp, b3))
 print('Matrix temp:')
 print(temp)
