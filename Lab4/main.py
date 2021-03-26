@@ -15,7 +15,7 @@ a = [
 
 def algorithm(matrix: list) -> list:
     """
-    Get a Frubenius form
+    Get a Frobenius form
     :param matrix:
     :return:
     """
@@ -32,7 +32,7 @@ def algorithm(matrix: list) -> list:
             else:
                 matrix_b[i - 1][j] = matrix[i][j] / matrix[i][i - 1] * (-1)
             matrix_b_minus[i - 1][j] = matrix[i][j]
-        print(template.substitute(string=f'Step: {abs(i - 4)}'))
+        print(template.substitute(string=f'Step: {abs(i - length)}'))
         print(template.substitute(string='Matrix b'))
         print(matrix_b)
         print(template.substitute(string='Matrix b minus'))
@@ -43,9 +43,20 @@ def algorithm(matrix: list) -> list:
     return matrix
 
 
+def print_equation(coefficients: list) -> None:
+    coefficients = list(coefficients)
+    coefficients = [round(coef * (-1), 5) for coef in coefficients]
+    coefficients.insert(0, 1)
+    equation = ''
+    for index in range(len(coefficients)):
+        equation += '+(' + str(coefficients[index]) + '*λ^' + str(abs(index - len(coefficients) + 1)) + ') '
+    equation += '= 0'
+    print(equation)
+
+
 print('Matrix A:')
 print(np.matrix(a))
 normal_form = algorithm(a.copy())
-print('Normal form:')
+print('Frobenius form:')
 print(normal_form)
-print()
+print_equation(normal_form[0])
