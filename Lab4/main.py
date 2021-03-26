@@ -1,4 +1,5 @@
 from string import Template
+from checker import fault
 
 import numpy as np
 from typing import Tuple
@@ -93,8 +94,11 @@ def main_part(matrix_a: list) -> None:
     print(template.substitute(string='NumPy numbers'))
     print(v)
     self_vectors = get_self_vectors(self_numbers, s_matrix)
+    print(template.substitute(string='Fault'))
+    print(round(fault.get_fault(sorted(self_numbers), sorted(v)), 5))
 
 
 print('Matrix A:')
 print(np.matrix(a))
 main_part(a.copy())
+
