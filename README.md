@@ -22,6 +22,10 @@ There are main files, that used in every lab
   
 * [Second lab](https://github.com/mezgoodle/numericalMethods_labs/tree/master/Lab2)
 
+* [Third lab](https://github.com/mezgoodle/numericalMethods_labs/tree/master/Lab3)
+
+* [Fourth lab](https://github.com/mezgoodle/numericalMethods_labs/tree/master/Lab4)
+
 ## Note
 
 The first lab is different from another.
