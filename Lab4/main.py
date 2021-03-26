@@ -43,15 +43,25 @@ def algorithm(matrix: list) -> list:
     return matrix
 
 
-def print_equation(coefficients: list) -> None:
+def solve_equation(coefficients: list) -> None:
     coefficients = list(coefficients)
     coefficients = [round(coef * (-1), 5) for coef in coefficients]
     coefficients.insert(0, 1)
+    # Print equation area start
     equation = ''
     for index in range(len(coefficients)):
         equation += '+(' + str(coefficients[index]) + '*λ^' + str(abs(index - len(coefficients) + 1)) + ') '
     equation += '= 0'
+    print(template.substitute(string='Characteristic equation'))
     print(equation)
+    # Print equation area end
+    # Print equation roots area start
+    roots = np.roots(coefficients)
+    v, w = np.linalg.eigh(a)
+    print('Solve the equation:')
+    print(roots)
+    print('NumPy roots')
+    print(v)
 
 
 print('Matrix A:')
@@ -59,4 +69,4 @@ print(np.matrix(a))
 normal_form = algorithm(a.copy())
 print('Frobenius form:')
 print(normal_form)
-print_equation(normal_form[0])
+solve_equation(normal_form[0])
