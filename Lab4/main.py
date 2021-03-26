@@ -18,8 +18,8 @@ a = [
 def frobenius(matrix: list) -> Tuple[list, list]:
     """
     Get a Frobenius form
-    :param matrix:
-    :return:
+    :param matrix: start matrix
+    :return: normalised matrix and S matrix for future
     """
     length = len(matrix)
     s_matrix = np.identity(length)
@@ -47,6 +47,11 @@ def frobenius(matrix: list) -> Tuple[list, list]:
 
 
 def get_self_numbers(coefficients: list) -> list:
+    """
+    Function to get self numbers
+    :param coefficients: numbers from the first raw in normalised matrix
+    :return: self numbers of matrix
+    """
     coefficients = list(coefficients)
     coefficients = [round(coef * (-1), 5) for coef in coefficients]
     coefficients.insert(0, 1)
@@ -58,12 +63,17 @@ def get_self_numbers(coefficients: list) -> list:
     print(template.substitute(string='Characteristic equation'))
     print(equation)
     # Print equation area end
-    # Print equation roots area start
     roots = np.roots(coefficients)
     return roots
 
 
-def get_self_vectors(self_numbers: list, s_matrix: list) -> list:
+def get_self_vectors(self_numbers: list, s_matrix: list) -> None:
+    """
+    Function to get self vectors
+    :param self_numbers: self numbers of matrix
+    :param s_matrix: S matrix from earlier Frobenius function
+    :return: nothing to return
+    """
     self_vectors = []
     y_array = []
     for number in self_numbers:
@@ -80,10 +90,14 @@ def get_self_vectors(self_numbers: list, s_matrix: list) -> list:
         vector = np.dot(s_matrix, element)
         self_vectors.append(vector)
         print(np.matrix(vector))
-    return self_vectors
 
 
 def main_part(matrix_a: list) -> None:
+    """
+    Get all functions in one place
+    :param matrix_a: start matrix
+    :return: nothing to return
+    """
     normal_form, s_matrix = frobenius(matrix_a)
     print(template.substitute(string='Frobenius form'))
     print(normal_form)
@@ -93,7 +107,7 @@ def main_part(matrix_a: list) -> None:
     v, w = np.linalg.eigh(matrix_a)
     print(template.substitute(string='NumPy numbers'))
     print(v)
-    self_vectors = get_self_vectors(self_numbers, s_matrix)
+    get_self_vectors(self_numbers, s_matrix)
     print(template.substitute(string='Fault'))
     print(round(fault.get_fault(sorted(self_numbers), sorted(v)), 5))
 
