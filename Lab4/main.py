@@ -67,12 +67,12 @@ def get_self_numbers(coefficients: list) -> list:
     return roots
 
 
-def get_self_vectors(self_numbers: list, s_matrix: list) -> None:
+def get_self_vectors(self_numbers: list, s_matrix: list) -> list:
     """
     Function to get self vectors
     :param self_numbers: self numbers of matrix
     :param s_matrix: S matrix from earlier Frobenius function
-    :return: nothing to return
+    :return: self vectors
     """
     self_vectors = []
     y_array = []
@@ -90,6 +90,22 @@ def get_self_vectors(self_numbers: list, s_matrix: list) -> None:
         vector = np.dot(s_matrix, element)
         self_vectors.append(vector)
         print(np.matrix(vector))
+    return self_vectors
+
+
+def check_vectors(matrix_a: list, self_numbers: list, self_vectors: list) -> None:
+    """
+    Check the equation Ax = λx
+    :param matrix_a: start matrix
+    :param self_numbers: self numbers of matrix A
+    :param self_vectors: self vectors of matrix A
+    :return: nothing to return
+    """
+    print(template.substitute(string='Ax = λx'))
+    for index in range(len(self_numbers)):
+        print(np.dot(matrix_a, self_vectors[index]))
+        print(np.dot(self_numbers[index], self_vectors[index]))
+        print()
 
 
 def main_part(matrix_a: list) -> None:
@@ -107,7 +123,8 @@ def main_part(matrix_a: list) -> None:
     v, w = np.linalg.eigh(matrix_a)
     print(template.substitute(string='NumPy numbers'))
     print(v)
-    get_self_vectors(self_numbers, s_matrix)
+    self_vectors = get_self_vectors(self_numbers, s_matrix)
+    check_vectors(matrix_a, self_numbers, self_vectors)
     print(template.substitute(string='Fault'))
     print(round(fault.get_fault(sorted(self_numbers), sorted(v)), 5))
 
