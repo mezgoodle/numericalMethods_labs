@@ -15,7 +15,7 @@ a = [
 ]
 
 
-def frobenius(matrix: list) -> Tuple[list, list]:
+def frobenius(matrix: list) -> Tuple[np.matrix, np.matrix]:
     """
     Get a Frobenius form
     :param matrix: start matrix
@@ -36,17 +36,17 @@ def frobenius(matrix: list) -> Tuple[list, list]:
             matrix_b_minus[i - 1][j] = matrix[i][j]
         print(template.substitute(string=f'Step: {abs(i - length)}'))
         print(template.substitute(string='Matrix b'))
-        print(matrix_b)
+        print(matrix_b.round(5))
         s_matrix = np.dot(s_matrix, matrix_b)
         print(template.substitute(string='Matrix b minus'))
-        print(matrix_b_minus)
+        print(matrix_b_minus.round(5))
         matrix = np.dot(matrix_b_minus, np.dot(matrix, matrix_b))
         print(template.substitute(string='Temporary result'))
-        print(matrix)
+        print(matrix.round(5))
     return matrix, s_matrix
 
 
-def get_self_numbers(coefficients: list) -> list:
+def get_self_numbers(coefficients: list) -> np.matrix:
     """
     Function to get self numbers
     :param coefficients: numbers from the first raw in normalised matrix
@@ -67,7 +67,7 @@ def get_self_numbers(coefficients: list) -> list:
     return roots
 
 
-def get_self_vectors(self_numbers: list, s_matrix: list) -> list:
+def get_self_vectors(self_numbers: list, s_matrix: np.matrix) -> list:
     """
     Function to get self vectors
     :param self_numbers: self numbers of matrix
@@ -82,14 +82,14 @@ def get_self_vectors(self_numbers: list, s_matrix: list) -> list:
             temp_array.insert(0, pow(number, i))
         y_array.append(temp_array)
     print(template.substitute(string='Y array'))
-    print(np.matrix(y_array))
+    print(np.matrix(y_array).round(5))
     print(template.substitute(string='S matrix'))
-    print(s_matrix)
+    print(s_matrix.round(5))
     print(template.substitute(string='Self vectors'))
     for element in y_array:
         vector = np.dot(s_matrix, element)
         self_vectors.append(vector)
-        print(np.matrix(vector))
+        print(np.matrix(vector).round(5))
     return self_vectors
 
 
@@ -103,8 +103,8 @@ def check_vectors(matrix_a: list, self_numbers: list, self_vectors: list) -> Non
     """
     print(template.substitute(string='Ax = λx'))
     for index in range(len(self_numbers)):
-        print(np.dot(matrix_a, self_vectors[index]))
-        print(np.dot(self_numbers[index], self_vectors[index]))
+        print(np.dot(matrix_a, self_vectors[index]).round(5))
+        print(np.dot(self_numbers[index], self_vectors[index]).round(5))
         print()
 
 
@@ -116,13 +116,13 @@ def main_part(matrix_a: list) -> None:
     """
     normal_form, s_matrix = frobenius(matrix_a)
     print(template.substitute(string='Frobenius form'))
-    print(normal_form)
+    print(normal_form.round(5))
     self_numbers = get_self_numbers(normal_form[0])
     print(template.substitute(string='Self numbers'))
-    print(self_numbers)
+    print(self_numbers.round(5))
     v, w = np.linalg.eigh(matrix_a)
     print(template.substitute(string='NumPy numbers'))
-    print(v)
+    print(v.round(5))
     self_vectors = get_self_vectors(self_numbers, s_matrix)
     check_vectors(matrix_a, self_numbers, self_vectors)
     print(template.substitute(string='Fault'))
@@ -132,4 +132,3 @@ def main_part(matrix_a: list) -> None:
 print('Matrix A:')
 print(np.matrix(a))
 main_part(a.copy())
-
