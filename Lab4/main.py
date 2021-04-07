@@ -1,10 +1,10 @@
 from string import Template
 from checker import fault
+from checker.template import template
 
 import numpy as np
 from typing import Tuple
 
-template = Template('#' * 10 + ' $string ' + '#' * 10)
 np.set_printoptions(suppress=True)
 
 a = [
