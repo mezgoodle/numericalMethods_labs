@@ -1,12 +1,22 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from string import Template
+from math import sin
 
 template = Template('#' * 10 + ' $string ' + '#' * 10)
 
-x = [-1, 0, 1, 2]
-y = [1, 1, 2, 0]
 
+def main_function(x: int, alpha=3) -> float:
+    y_value = sin(alpha / 2 * x) + (x * alpha) ** (1 / 3)
+    return y_value
+
+
+k = 10 - 1
+x_values = [-5 + k, -3 + k, -1 + k, 3 + k]
+y_values = [main_function(x) for x in x_values]
+print(template.substitute(string='X and Y values'))
+print(x_values)
+print(y_values)
 
 def getCoeffsForNewton(x_elements: list, y_elements: list) -> list:
     """
@@ -31,13 +41,13 @@ def getCoeffsForNewton(x_elements: list, y_elements: list) -> list:
     for step in range(1, length):
         for index in range(length - step):
             pyramid[index][step] = (pyramid[index + 1][step - 1] - pyramid[index][step - 1]) / (
-                        x_elements[index + step] - x_elements[index])
+                    x_elements[index + step] - x_elements[index])
     print(template.substitute(string='Final pyramid'))
     print(np.matrix(pyramid))
     return pyramid[0]  # return first row
 
 
-coeff_vector = getCoeffsForNewton(x.copy(), y.copy())
+coeff_vector = getCoeffsForNewton(x_values.copy(), y_values.copy())
 print(template.substitute(string='Coefficients'))
 print(coeff_vector)
 
@@ -66,7 +76,7 @@ def eval_newton(x, coeff_vector):
     return final_pol
 
 
-final_pol = eval_newton(x, coeff_vector)
+final_pol = eval_newton(x_values, coeff_vector)
 print(template.substitute(string='Coeffs with polynomial from NumPy'))
 p = np.flip(final_pol[0].coef, axis=0)
 print(np.array(p).round(5))
@@ -75,7 +85,8 @@ x_axis = np.linspace(-1, 10, num=5000)
 y_axis = np.polyval(p, x_axis)
 plt.plot.title = 'hello'
 plt.plot(x_axis, y_axis, color='blue')
-plt.plot(x, np.polyval(p, x), color='green')
+plt.plot(x_values, np.polyval(p, x_values), color='green')
 plt.legend(['first', 'second'])
 plt.grid()
 plt.show()
+print(main_function(x_values[1]))
