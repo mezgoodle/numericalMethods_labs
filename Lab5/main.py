@@ -7,22 +7,30 @@ template = Template('#' * 10 + ' $string ' + '#' * 10)
 
 
 def main_function(x: int, alpha=3) -> float:
+    """
+    Main function on a graphic
+    :param x: x value
+    :param alpha: some value
+    :return: result y = f(x)
+    """
     y_value = sin(alpha / 2 * x) + (x * alpha) ** (1 / 3)
     return y_value
 
 
+# Consts
 k = 10 - 1
 x_values = [-5 + k, -3 + k, -1 + k, 3 + k]
 y_values = [main_function(x) for x in x_values]
 print(template.substitute(string='X and Y values'))
 print(x_values)
-print(y_values)
+print(np.array(y_values).round(5))
+
 
 def getCoeffsForNewton(x_elements: list, y_elements: list) -> list:
     """
-    Creates NDD pyramid and extracts coeffs
-    :param x_elements: parameters
-    :param y_elements: results
+    Creates pyramid and extracts coefficients
+    :param x_elements: x values
+    :param y_elements: results of f(x)
     :return: coefficients
     """
     length = len(y_elements)
@@ -49,16 +57,16 @@ def getCoeffsForNewton(x_elements: list, y_elements: list) -> list:
 
 coeff_vector = getCoeffsForNewton(x_values.copy(), y_values.copy())
 print(template.substitute(string='Coefficients'))
-print(coeff_vector)
+print(np.array(coeff_vector).round(5))
 
 
-def eval_newton(x, coeff_vector):
+def print_eval_newton(x, coeff_vector):
     print(template.substitute(string='Newton eval'))
     for i in range(len(coeff_vector)):
-        print(f'+{coeff_vector[i]}', end='')
+        print(f' +({round(coeff_vector[i], 5)}) ', end='')
         for j in range(i):
             print(f'(x-{x[j]})', end='')
-    print('=y', end='\n')
+    print(' = y', end='\n')
 
     # Create polynomial with NumPy
     final_pol = np.polynomial.Polynomial([0.])  # our target polynomial
@@ -72,21 +80,63 @@ def eval_newton(x, coeff_vector):
             p = np.polymul(p, p_temp)  # multiply dummy with expression
         p *= coeff_vector[i]  # apply coefficient
         final_pol = np.polyadd(final_pol, p)  # add to target polynomial
+    final_pol[0].coef = np.round_(final_pol[0].coef, decimals=5)
     print(final_pol[0])
-    return final_pol
 
 
-final_pol = eval_newton(x_values, coeff_vector)
-print(template.substitute(string='Coeffs with polynomial from NumPy'))
-p = np.flip(final_pol[0].coef, axis=0)
-print(np.array(p).round(5))
+def eval_poly(coeffs, x_old, x_current):
+    n = len(x_old) - 1
+    p = coeffs[n]
+    for k in range(1, n + 1):
+        p = coeffs[n - k] + (x_current - x_old[n - k]) * p
+    return p
 
-x_axis = np.linspace(-1, 10, num=5000)
-y_axis = np.polyval(p, x_axis)
-plt.plot.title = 'hello'
-plt.plot(x_axis, y_axis, color='blue')
-plt.plot(x_values, np.polyval(p, x_values), color='green')
-plt.legend(['first', 'second'])
+
+print_eval_newton(x_values, coeff_vector)
+
+x_axis = np.linspace(4, 12, num=10000)
+x_axis_2 = np.linspace(4, 12, num=2000)
+plt.plot(x_axis, [main_function(x) for x in x_axis], color='blue')
+plt.plot(x_axis, [eval_poly(coeff_vector, x_values, x) for x in x_axis], color='green')
+plt.legend(['Main', 'Poly'])
 plt.grid()
 plt.show()
-print(main_function(x_values[1]))
+
+
+def create_matrix(x_array, y_array):
+    S = []
+    matrix_eval = []
+    # I
+    for i in range(1, len(x_array)):
+        row = []
+        h = x_array[i] - x_array[i-1]
+        for j in range(3):
+            row.append(h ** (j+1))
+        row.append(y_array[i] - y_array[i-1])
+        matrix_eval.append(row)
+    # II
+    for i in range(1, len(x_array)-1):
+        row = []
+        h = x_array[i] - x_array[i - 1]
+        row.append(1)
+        row.append(-1)
+        for j in range(2):
+            row.append(-(j+2) * (h ** (j+1)))
+        row.append(0)
+        matrix_eval.append(row)
+    # III
+    for i in range(1, len(x_array) - 1):
+        row = []
+        h = x_array[i] - x_array[i - 1]
+        row.append(1)
+        row.append(-1)
+        row.append(-3 * h)
+        row.append(0)
+        matrix_eval.append(row)
+    # IV
+    matrix_eval.append([1, 0])
+    matrix_eval.append([1, 3 * (x_array[-1] - x_array[-2]), 0])
+    print(np.array(matrix_eval))
+
+
+create_matrix([2, 3, 5, 7], [4, -2, 6, -3])
