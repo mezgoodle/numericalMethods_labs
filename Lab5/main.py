@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from string import Template
 from math import sin
-from Lab2 import gaussian
 
 template = Template('#' * 10 + ' $string ' + '#' * 10)
 
