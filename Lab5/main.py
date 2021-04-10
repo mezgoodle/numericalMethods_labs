@@ -11,13 +11,25 @@ def main_function(x: int, alpha=3) -> float:
     Main function on a graphic
     :param x: x value
     :param alpha: some value
-    :return: result y = f(x)
+    :return: result matrix_b = f(x)
     """
     y_value = sin(alpha / 2 * x) + (x * alpha) ** (1 / 3)
     return y_value
 
 
 # Consts
+indexes = {
+    'b1': 0,
+    'b2': 1,
+    'b3': 2,
+    'c1': 3,
+    'c2': 4,
+    'c3': 5,
+    'd1': 6,
+    'd2': 7,
+    'd3': 8,
+    'matrix_b': 9
+}
 k = 10 - 1
 x_values = [-5 + k, -3 + k, -1 + k, 1 + k, 3 + k]
 y_values = [main_function(x) for x in x_values]
@@ -66,7 +78,7 @@ def print_eval_newton(x, coeff_vector):
         print(f' +({round(coeff_vector[i], 5)}) ', end='')
         for j in range(i):
             print(f'(x-{x[j]})', end='')
-    print(' = y', end='\n')
+    print(' = matrix_b', end='\n')
 
     # Create polynomial with NumPy
     final_pol = np.polynomial.Polynomial([0.])  # our target polynomial
@@ -105,18 +117,6 @@ plt.show()
 
 def create_matrix(x_array, y_array):
     matrix_a = []
-    indexes = {
-        'b1': 0,
-        'b2': 1,
-        'b3': 2,
-        'c1': 3,
-        'c2': 4,
-        'c3': 5,
-        'd1': 6,
-        'd2': 7,
-        'd3': 8,
-        'y': 9
-    }
     # I
     for i in range(1, len(x_array)):
         row = np.zeros(10)
@@ -124,7 +124,7 @@ def create_matrix(x_array, y_array):
         row[indexes[f'b{i}']] = h
         row[indexes[f'c{i}']] = h ** 2
         row[indexes[f'd{i}']] = h ** 3
-        row[indexes['y']] = y_array[i] - y_array[i - 1]
+        row[indexes['matrix_b']] = y_array[i] - y_array[i - 1]
         matrix_a.append(row)
     # II
     for i in range(1, len(x_array) - 1):
@@ -134,7 +134,7 @@ def create_matrix(x_array, y_array):
         row[indexes[f'b{i}']] = -1
         row[indexes[f'c{i}']] = -2 * h
         row[indexes[f'd{i}']] = -3 * h ** 2
-        row[indexes['y']] = 0
+        row[indexes['matrix_b']] = 0
         matrix_a.append(row)
     # III
     for i in range(1, len(x_array) - 1):
@@ -143,17 +143,17 @@ def create_matrix(x_array, y_array):
         row[indexes[f'c{i + 1}']] = 1
         row[indexes[f'c{i}']] = -1
         row[indexes[f'd{i}']] = -3 * h
-        row[indexes['y']] = 0
+        row[indexes['matrix_b']] = 0
         matrix_a.append(row)
     # IV
     row = np.zeros(10)
     row[indexes[f'c{len(x_array) - 1}']] = 1
     row[indexes[f'd{len(x_array) - 1}']] = 3 * (x_array[-1] - x_array[-2])
-    row[indexes['y']] = 0
+    row[indexes['matrix_b']] = 0
     matrix_a.append(row)
     row = np.zeros(10)
     row[indexes['c1']] = 1
-    row[indexes['y']] = 0
+    row[indexes['matrix_b']] = 0
     matrix_a.append(row)
     matrix_b = np.zeros(9)
     for i in range(len(matrix_a)):
@@ -165,15 +165,26 @@ def create_matrix(x_array, y_array):
     return matrix_a, matrix_b
 
 
-def Kramer(matrix, matrix_copy, y, x_arr):
-    for i in range(0, len(y)):
-        for j in range(0, len(y)):
-            matrix_copy[j][i] = y[j]
+def Kramer(matrix, matrix_copy, matrix_b):
+    coeff_array = []
+    for i in range(0, len(matrix_b)):
+        for j in range(0, len(matrix_b)):
+            matrix_copy[j][i] = matrix_b[j]
             if i > 0:
                 matrix_copy[j][i - 1] = matrix[j][i - 1]
-        x_arr.append(np.linalg.det(matrix_copy) / np.linalg.det(matrix))
-    print(x_arr)
+        coeff_array.append(np.linalg.det(matrix_copy) / np.linalg.det(matrix))
+    coeff_array = np.array(coeff_array).round(5)
+    return coeff_array
+
+
+def print_s(coeffs_array, x_array, y_array):
+    print(template.substitute(string='S evals'))
+    for i in range(len(x_array)-1):
+        print(f"{y_array[i]} +({coeffs_array[indexes[f'b{i+1}']]})(x-{x_array[i]}) +{coeffs_array[indexes[f'c{i+1}']]}(x-{x_array[i]})**2 +{coeffs_array[indexes[f'd{i+1}']]}(x-{x_array[i]})**3")
+        print()
 
 
 matrix_a, matrix_b = create_matrix([2, 3, 5, 7], [4, -2, 6, -3])
-Kramer(matrix_a, matrix_a.copy(), matrix_b, [])
+s_coeffs = Kramer(matrix_a, matrix_a.copy(), matrix_b)
+print(s_coeffs)
+print_s(s_coeffs, [2, 3, 5, 7], [4, -2, 6, -3])
