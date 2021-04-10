@@ -19,7 +19,7 @@ def main_function(x: int, alpha=3) -> float:
 
 # Consts
 k = 10 - 1
-x_values = [-5 + k, -3 + k, -1 + k, 3 + k]
+x_values = [-5 + k, -3 + k, -1 + k, 1 + k, 3 + k]
 y_values = [main_function(x) for x in x_values]
 print(template.substitute(string='X and Y values'))
 print(x_values)
