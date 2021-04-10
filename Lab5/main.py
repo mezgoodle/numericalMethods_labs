@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from string import Template
 from math import sin
+from Lab2 import gaussian
 
 template = Template('#' * 10 + ' $string ' + '#' * 10)
 
@@ -120,17 +121,17 @@ def create_matrix(x_array, y_array):
     # I
     for i in range(1, len(x_array)):
         row = np.zeros(10)
-        h = x_array[i] - x_array[i-1]
+        h = x_array[i] - x_array[i - 1]
         row[indexes[f'b{i}']] = h
         row[indexes[f'c{i}']] = h ** 2
         row[indexes[f'd{i}']] = h ** 3
-        row[indexes['y']] = y_array[i] - y_array[i-1]
+        row[indexes['y']] = y_array[i] - y_array[i - 1]
         matrix_a.append(row)
     # II
-    for i in range(1, len(x_array)-1):
+    for i in range(1, len(x_array) - 1):
         row = np.zeros(10)
         h = x_array[i] - x_array[i - 1]
-        row[indexes[f'b{i+1}']] = 1
+        row[indexes[f'b{i + 1}']] = 1
         row[indexes[f'b{i}']] = -1
         row[indexes[f'c{i}']] = -2 * h
         row[indexes[f'd{i}']] = -3 * h ** 2
@@ -147,15 +148,33 @@ def create_matrix(x_array, y_array):
         matrix_a.append(row)
     # IV
     row = np.zeros(10)
-    row[indexes['c1']] = 1
+    row[indexes[f'c{len(x_array) - 1}']] = 1
+    row[indexes[f'd{len(x_array) - 1}']] = 3 * (x_array[-1] - x_array[-2])
     row[indexes['y']] = 0
     matrix_a.append(row)
     row = np.zeros(10)
-    row[indexes[f'c{len(x_array)-1}']] = 1
-    row[indexes[f'd{len(x_array)-1}']] = 3 * (x_array[-1] - x_array[-2])
+    row[indexes['c1']] = 1
     row[indexes['y']] = 0
     matrix_a.append(row)
+    matrix_b = np.zeros(9)
+    for i in range(len(matrix_a)):
+        matrix_b[i] = matrix_a[i][-1]
+        # del matrix_a[i][-1]
+    matrix_a = np.delete(matrix_a, np.s_[-1:], axis=1)
     print(np.matrix(matrix_a))
+    print(matrix_b)
+    return matrix_a, matrix_b
 
 
-create_matrix([2, 3, 5, 7], [4, -2, 6, -3])
+def Kramer(matrix, matrix_copy, y, x_arr):
+    for i in range(0, len(y)):
+        for j in range(0, len(y)):
+            matrix_copy[j][i] = y[j]
+            if i > 0:
+                matrix_copy[j][i - 1] = matrix[j][i - 1]
+        x_arr.append(np.linalg.det(matrix_copy) / np.linalg.det(matrix))
+    print(x_arr)
+
+
+matrix_a, matrix_b = create_matrix([2, 3, 5, 7], [4, -2, 6, -3])
+Kramer(matrix_a, matrix_a.copy(), matrix_b, [])
