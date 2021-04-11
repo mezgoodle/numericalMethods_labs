@@ -256,11 +256,11 @@ def get_faults(x_values: list, y_values: list, newton_coeffs: list, spline_coeff
     :return: nothin to return
     """
     cs = CubicSpline(x_values, y_values)
-    faults = {}
+    faults = {'newton': 0., 'spline': 0., 'scipy': 0.}
     for x_value in x_values:
-        faults['newton'] = abs(solve_newton_polynomial(newton_coeffs, x_values, x_value) - linear_function(x_value))
-        faults['spline'] = abs(solve_spline_equation(x_values, y_values, x_value, spline_coeffs, indexes) - linear_function(x_value))
-        faults['scipy'] = abs(cs(x_value) - linear_function(x_value))
+        faults['newton'] += abs(solve_newton_polynomial(newton_coeffs, x_values, x_value) - linear_function(x_value))
+        faults['spline'] += abs(solve_spline_equation(x_values, y_values, x_value, spline_coeffs, indexes) - linear_function(x_value))
+        faults['scipy'] += abs(cs(x_value) - linear_function(x_value))
     print(template.substitute(string='Faults'))
     print(template.substitute(string='Newton interpolation'))
     print(round(faults['newton'], 5))
@@ -295,7 +295,7 @@ def main():
     matrix_c = matrix_a.copy()
     spline_coeffs = solve_kramer_method(matrix_a, vector_b, matrix_c)
     print(template.substitute(string='Spline coeffiecients'))
-    print(indexes)
+    print(spline_coeffs)
     print_spline_equations(x_values.copy(), y_values.copy(), spline_coeffs.copy(), indexes.copy())
     show_plot(x_values=x_values.copy(), y_values=y_values.copy(), spline_coeffs=spline_coeffs.copy(),
               indexes=indexes.copy())
