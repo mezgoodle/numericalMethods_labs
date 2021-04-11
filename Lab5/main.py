@@ -122,15 +122,17 @@ def show_plot(x_values: list, y_values: list, newton_coeffs=None, spline_coeffs=
     fig, ax = plt.subplots()
     ax.plot(x_values, y_values, 'o', label='Data')
     ax.plot(x_axis, [linear_function(x) for x in x_axis], label='Linear')
-    if newton_coeffs is not None:
+    if scipy_flag:
+        cs = CubicSpline(x_values, y_values)
+        ax.plot(x_axis_2, [solve_spline_equation(x_values, y_values, x, spline_coeffs, indexes) for x in x_axis_2],
+                label='Spline interpolation')
+        ax.plot(x_axis_2, cs(x_axis_2), label='SciPy spline interpolation')
+    elif newton_coeffs is not None:
         ax.plot(x_axis_2, [solve_newton_polynomial(newton_coeffs, x_values, x) for x in x_axis_2],
                 label='Newton Polynomial')
     elif spline_coeffs is not None:
         ax.plot(x_axis_2, [solve_spline_equation(x_values, y_values, x, spline_coeffs, indexes) for x in x_axis_2],
                 label='Spline interpolation')
-    elif scipy_flag:
-        cs = CubicSpline(x_values, y_values)
-        ax.plot(x_axis_2, cs(x_axis_2), label='SciPy spline interpolation')
     ax.legend(loc='lower left', ncol=2)
     plt.grid()
     plt.show()
@@ -300,7 +302,7 @@ def main():
     show_plot(x_values=x_values.copy(), y_values=y_values.copy(), spline_coeffs=spline_coeffs.copy(),
               indexes=indexes.copy())
     # SciPy spline
-    show_plot(x_values=x_values.copy(), y_values=y_values.copy(), scipy_flag=True)
+    show_plot(x_values=x_values.copy(), y_values=y_values.copy(), spline_coeffs=spline_coeffs.copy(), indexes=indexes.copy(), scipy_flag=True)
     # Get faults
     get_faults(x_values.copy(), y_values.copy(), newton_coeffs.copy(), spline_coeffs.copy(), indexes.copy())
 
