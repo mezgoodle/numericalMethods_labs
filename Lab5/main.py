@@ -183,7 +183,7 @@ def create_matrix(x_values: list, y_values: list, indexes: dict) -> [list, list]
     for i in range(len(matrix_a)):
         vector_b[i] = matrix_a[i][-1]
     matrix_a = np.delete(matrix_a, np.s_[-1:], axis=1)
-    print(template.substitute(string='Matrix A and matrix B'))
+    print(template.substitute(string='Matrix A and vector B'))
     print(np.matrix(matrix_a))
     print(vector_b)
     return matrix_a, vector_b
