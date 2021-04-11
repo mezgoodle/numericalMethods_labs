@@ -245,6 +245,31 @@ def solve_spline_equation(x_values: list, y_values: list, x_value: float, spline
                                x_value - x_values[i]) ** 3
 
 
+def get_faults(x_values: list, y_values: list, newton_coeffs: list, spline_coeffs: list, indexes: dict) -> None:
+    """
+    Function that prints faults for math functions
+    :param x_values: our nodes
+    :param y_values: values at this nodes
+    :param newton_coeffs: coefficients for newton polynomial
+    :param spline_coeffs: coefficients for spline equations
+    :param indexes: dictionary with indexes for spline equations
+    :return: nothin to return
+    """
+    cs = CubicSpline(x_values, y_values)
+    faults = {}
+    for x_value in x_values:
+        faults['newton'] = abs(solve_newton_polynomial(newton_coeffs, x_values, x_value) - linear_function(x_value))
+        faults['spline'] = abs(solve_spline_equation(x_values, y_values, x_value, spline_coeffs, indexes) - linear_function(x_value))
+        faults['scipy'] = abs(cs(x_value) - linear_function(x_value))
+    print(template.substitute(string='Faults'))
+    print(template.substitute(string='Newton interpolation'))
+    print(round(faults['newton'], 5))
+    print(template.substitute(string='Cubic spline interpolation'))
+    print(round(faults['spline'], 4))
+    print(template.substitute(string='SciPy cubic spline interpolation'))
+    print(round(faults['scipy'], 5))
+
+
 def main():
     """Main function"""
     k = 10 - 1
@@ -276,6 +301,8 @@ def main():
               indexes=indexes.copy())
     # SciPy spline
     show_plot(x_values=x_values.copy(), y_values=y_values.copy(), scipy_flag=True)
+    # Get faults
+    get_faults(x_values.copy(), y_values.copy(), newton_coeffs.copy(), spline_coeffs.copy(), indexes.copy())
 
 
 main()
