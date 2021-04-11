@@ -12,7 +12,7 @@ def linear_function(x: int, alpha=3) -> float:
     Main linear function
     :param x: x value
     :param alpha: some value
-    :return: result vector_b = f(x)
+    :return: result y = f(x)
     """
     y_value = sin(alpha / 2 * x) + (x * alpha) ** (1 / 3)
     return y_value
@@ -253,7 +253,7 @@ def get_faults(x_values: list, y_values: list, newton_coeffs: list, spline_coeff
     :param newton_coeffs: coefficients for newton polynomial
     :param spline_coeffs: coefficients for spline equations
     :param indexes: dictionary with indexes for spline equations
-    :return: nothin to return
+    :return: nothing to return
     """
     cs = CubicSpline(x_values, y_values)
     faults = {'newton': 0., 'spline': 0., 'scipy': 0.}
