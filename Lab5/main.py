@@ -6,7 +6,7 @@ from math import sin
 template = Template('#' * 10 + ' $string ' + '#' * 10)
 
 
-def main_function(x: int, alpha=3) -> float:
+def linear_function(x: int, alpha=3) -> float:
     """
     Main function on a graphic
     :param x: x value
@@ -18,21 +18,18 @@ def main_function(x: int, alpha=3) -> float:
 
 
 # Consts
-indexes = {}
-for i in range(len([2, 3, 5, 7])-1):
-    indexes[f'b{i + 1}'] = i
-    indexes[f'c{i + 1}'] = i + len([2, 3, 5, 7])-1
-    indexes[f'd{i + 1}'] = i + len([2, 3, 5, 7])*2-2
-indexes['y'] = (len([2, 3, 5, 7])-1)*3
-k = 10 - 1
-x_values = [-5 + k, -3 + k, -1 + k, 1 + k, 3 + k]
-y_values = [main_function(x) for x in x_values]
-print(template.substitute(string='X and Y values'))
-print(x_values)
-print(np.array(y_values).round(5))
+def create_indexes(x_values):
+    indexes = {}
+    length = len(x_values)
+    for i in range(length-1):
+        indexes[f'b{i + 1}'] = i
+        indexes[f'c{i + 1}'] = i + length-1
+        indexes[f'd{i + 1}'] = i + length*2-2
+    indexes['y'] = (length-1)*3
+    return indexes
 
 
-def getCoeffsForNewton(x_elements: list, y_elements: list) -> list:
+def get_coeffs_for_newton_polynomial(x_elements: list, y_elements: list) -> list:
     """
     Creates pyramid and extracts coefficients
     :param x_elements: x values
@@ -61,22 +58,17 @@ def getCoeffsForNewton(x_elements: list, y_elements: list) -> list:
     return pyramid[0]  # return first row
 
 
-coeff_vector = getCoeffsForNewton(x_values.copy(), y_values.copy())
-print(template.substitute(string='Coefficients'))
-print(np.array(coeff_vector).round(5))
-
-
-def print_eval_newton(x, coeff_vector):
+def print_newton_polynomial(x, coeff_vector):
     print(template.substitute(string='Newton eval'))
     for i in range(len(coeff_vector)):
         print(f' +({round(coeff_vector[i], 5)}) ', end='')
         for j in range(i):
             print(f'(x-{x[j]})', end='')
-    print(' = matrix_b', end='\n')
+    print(' = y', end='\n')
 
     # Create polynomial with NumPy
     final_pol = np.polynomial.Polynomial([0.])  # our target polynomial
-    n = len(coeff_vector)  # get number of coeffs
+    n = len(coeff_vector)  # get number of newton_coeffs
     for i in range(n):
         p = np.polynomial.Polynomial([1.])  # create a dummy polynomial
         for j in range(i):
@@ -90,30 +82,36 @@ def print_eval_newton(x, coeff_vector):
     print(final_pol[0])
 
 
-def eval_poly(coeffs, x_old, x_current):
-    n = len(x_old) - 1
-    p = coeffs[n]
-    for k in range(1, n + 1):
-        p = coeffs[n - k] + (x_current - x_old[n - k]) * p
-    return p
+def solve_newton_polynomial(newton_coeffs, x_values, x_value):
+    length = len(x_values) - 1
+    result = newton_coeffs[length]
+    for k in range(1, length + 1):
+        result = newton_coeffs[length - k] + (x_value - x_values[length - k]) * result
+    return result
 
 
-print_eval_newton(x_values, coeff_vector)
+def show_plot(x_values=None, y_values=None, newton_coeffs=None, spline_coeffs=None, indexes=None):
+    x_axis = np.linspace(4, 12, num=10000)
+    x_axis_2 = np.linspace(4, 12, num=2000)
+    plt.plot(x_axis, [linear_function(x) for x in x_axis], color='blue')
+    if newton_coeffs is not None:
+        plt.plot(x_axis_2, [solve_newton_polynomial(newton_coeffs, x_values, x) for x in x_axis_2], color='green')
+        plt.legend(['Linear function', 'Newton Polynomial'])
+    elif spline_coeffs is not None:
+        plt.plot(x_axis_2, [solve_spline_equation(x_values, y_values, x, spline_coeffs, indexes) for x in x_axis_2], color='green')
+        plt.legend(['Linear function', 'Spline interpolation'])
+    else:
+        plt.legend(['Linear function'])
+    plt.grid()
+    plt.show()
 
-x_axis = np.linspace(4, 12, num=10000)
-x_axis_2 = np.linspace(4, 12, num=2000)
-plt.plot(x_axis, [main_function(x) for x in x_axis], color='blue')
-plt.plot(x_axis, [eval_poly(coeff_vector, x_values, x) for x in x_axis], color='green')
-plt.legend(['Main', 'Poly'])
-plt.grid()
-plt.show()
 
-
-def create_matrix(x_array, y_array):
+def create_matrix(x_array, y_array, indexes):
     matrix_a = []
+    indexes_length = len(indexes)
     # I
     for i in range(1, len(x_array)):
-        row = np.zeros(10)
+        row = np.zeros(indexes_length)
         h = x_array[i] - x_array[i - 1]
         row[indexes[f'b{i}']] = h
         row[indexes[f'c{i}']] = h ** 2
@@ -122,7 +120,7 @@ def create_matrix(x_array, y_array):
         matrix_a.append(row)
     # II
     for i in range(1, len(x_array) - 1):
-        row = np.zeros(10)
+        row = np.zeros(indexes_length)
         h = x_array[i] - x_array[i - 1]
         row[indexes[f'b{i + 1}']] = 1
         row[indexes[f'b{i}']] = -1
@@ -132,7 +130,7 @@ def create_matrix(x_array, y_array):
         matrix_a.append(row)
     # III
     for i in range(1, len(x_array) - 1):
-        row = np.zeros(10)
+        row = np.zeros(indexes_length)
         h = x_array[i] - x_array[i - 1]
         row[indexes[f'c{i + 1}']] = 1
         row[indexes[f'c{i}']] = -1
@@ -140,51 +138,76 @@ def create_matrix(x_array, y_array):
         row[indexes['y']] = 0
         matrix_a.append(row)
     # IV
-    row = np.zeros(10)
+    row = np.zeros(indexes_length)
     row[indexes[f'c{len(x_array) - 1}']] = 1
     row[indexes[f'd{len(x_array) - 1}']] = 3 * (x_array[-1] - x_array[-2])
     row[indexes['y']] = 0
     matrix_a.append(row)
-    row = np.zeros(10)
+    row = np.zeros(indexes_length)
     row[indexes['c1']] = 1
     row[indexes['y']] = 0
     matrix_a.append(row)
-    matrix_b = np.zeros(9)
+    matrix_b = np.zeros(indexes_length-1)
     for i in range(len(matrix_a)):
         matrix_b[i] = matrix_a[i][-1]
-        # del matrix_a[i][-1]
     matrix_a = np.delete(matrix_a, np.s_[-1:], axis=1)
+    print(template.substitute(string='Matrix A and matrix B'))
     print(np.matrix(matrix_a))
     print(matrix_b)
     return matrix_a, matrix_b
 
 
-def Kramer(matrix, matrix_copy, matrix_b):
-    coeff_array = []
+def solve_kramer_method(matrix_a, matrix_b, matrix_c):
+    spline_coeffs = []
     for i in range(0, len(matrix_b)):
         for j in range(0, len(matrix_b)):
-            matrix_copy[j][i] = matrix_b[j]
+            matrix_c[j][i] = matrix_b[j]
             if i > 0:
-                matrix_copy[j][i - 1] = matrix[j][i - 1]
-        coeff_array.append(np.linalg.det(matrix_copy) / np.linalg.det(matrix))
-    coeff_array = np.array(coeff_array).round(5)
-    return coeff_array
+                matrix_c[j][i - 1] = matrix_a[j][i - 1]
+        spline_coeffs.append(np.linalg.det(matrix_c) / np.linalg.det(matrix_a))
+    spline_coeffs = np.array(spline_coeffs).round(5)
+    return spline_coeffs
 
 
-def print_s(coeffs_array, x_array, y_array):
-    print(template.substitute(string='S evals'))
-    for i in range(len(x_array)-1):
-        print(f"{y_array[i]} +({coeffs_array[indexes[f'b{i+1}']]})(x-{x_array[i]}) +{coeffs_array[indexes[f'c{i+1}']]}(x-{x_array[i]})**2 +{coeffs_array[indexes[f'd{i+1}']]}(x-{x_array[i]})**3")
+def print_spline_equations(x_values, y_values, spline_coeffs, indexes):
+    print(template.substitute(string='Spline equations'))
+    for i in range(len(x_values) - 1):
+        print(f"{y_values[i]} +({spline_coeffs[indexes[f'b{i + 1}']]})(x-{x_values[i]}) +{spline_coeffs[indexes[f'c{i + 1}']]}(x-{x_values[i]})**2 +{spline_coeffs[indexes[f'd{i + 1}']]}(x-{x_values[i]})**3")
 
 
-def eval_s(coeffs_array, x_array, y_array, x_value):
-    for i in range(len(x_array)-1):
-        if x_array[i] <= x_value <= x_array[i+1]:
-            return y_array[i] + coeffs_array[indexes[f'b{i+1}']] * (x_value-x_array[i]) + coeffs_array[indexes[f'c{i+1}']] * (x_value-x_array[i]) ** 2 + coeffs_array[indexes[f'd{i+1}']] * (x_value-x_array[i]) ** 3
+def solve_spline_equation(x_values, y_values, x_value, spline_coeffs, indexes):
+    for i in range(len(x_values) - 1):
+        if x_values[i] <= x_value <= x_values[i + 1]:
+            return y_values[i] + spline_coeffs[indexes[f'b{i + 1}']] * (x_value - x_values[i]) + spline_coeffs[indexes[f'c{i + 1}']] * (x_value - x_values[i]) ** 2 + spline_coeffs[indexes[f'd{i + 1}']] * (x_value - x_values[i]) ** 3
 
 
-matrix_a, matrix_b = create_matrix([2, 3, 5, 7], [4, -2, 6, -3])
-s_coeffs = Kramer(matrix_a, matrix_a.copy(), matrix_b)
-print(s_coeffs)
-print_s(s_coeffs, [2, 3, 5, 7], [4, -2, 6, -3])
-print(eval_s(s_coeffs, [2, 3, 5, 7], [4, -2, 6, -3], 7))
+def main():
+    k = 10 - 1
+    x_values = [-5 + k, -3 + k, -1 + k, 1 + k, 3 + k]
+    y_values = [linear_function(x) for x in x_values]
+    print(template.substitute(string='X and Y values'))
+    print(x_values)
+    print(np.array(y_values).round(5))
+    show_plot(x_values=x_values.copy())
+    # Newton Polynomial
+    newton_coeffs = get_coeffs_for_newton_polynomial(x_values.copy(), y_values.copy())
+    print(template.substitute(string='Coefficients'))
+    print(np.array(newton_coeffs).round(5))
+    print_newton_polynomial(x_values.copy(), newton_coeffs.copy())
+    show_plot(x_values=x_values.copy(), newton_coeffs=newton_coeffs)
+    # Cubic spline
+    # x_values_2 = [2, 3, 5, 7]
+    # y_values_2 = [4, -2, 6, -3]
+    indexes = create_indexes(x_values.copy())
+    print(template.substitute(string='Indexes'))
+    print(indexes)
+    matrix_a, matrix_b = create_matrix(x_values.copy(), y_values.copy(), indexes.copy())
+    matrix_c = matrix_a.copy()
+    spline_coeffs = solve_kramer_method(matrix_a, matrix_b, matrix_c)
+    print(template.substitute(string='Spline coeffiecients'))
+    print(indexes)
+    print_spline_equations(x_values.copy(), y_values.copy(), spline_coeffs.copy(), indexes.copy())
+    show_plot(x_values=x_values.copy(), y_values=y_values.copy(), spline_coeffs=spline_coeffs.copy(), indexes=indexes.copy())
+
+
+main()
