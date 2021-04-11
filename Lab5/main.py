@@ -1,3 +1,4 @@
+from scipy.interpolate import CubicSpline
 import numpy as np
 import matplotlib.pyplot as plt
 from string import Template
@@ -105,14 +106,15 @@ def solve_newton_polynomial(newton_coeffs: list, x_values: list, x_value: float)
     return result
 
 
-def show_plot(x_values: list, y_values: list, newton_coeffs=None, spline_coeffs=None, indexes=None) -> None:
+def show_plot(x_values: list, y_values: list, newton_coeffs=None, spline_coeffs=None, indexes=None, scipy_flag=False) -> None:
     """
     Function for creating plots
     :param x_values: our nodes
     :param y_values: values at this nodes
     :param newton_coeffs: coefficients for newton polynomial
     :param spline_coeffs: coefficients for spline equations
-    :param indexes:
+    :param indexes: dictionary with indexes for spline equations
+    :param scipy_flag: flag to show plot with scipy
     :return: nothing to return
     """
     x_axis = np.linspace(4, 12, num=10000)
@@ -126,6 +128,9 @@ def show_plot(x_values: list, y_values: list, newton_coeffs=None, spline_coeffs=
     elif spline_coeffs is not None:
         ax.plot(x_axis_2, [solve_spline_equation(x_values, y_values, x, spline_coeffs, indexes) for x in x_axis_2],
                 label='Spline interpolation')
+    elif scipy_flag:
+        cs = CubicSpline(x_values, y_values)
+        ax.plot(x_axis_2, cs(x_axis_2), label='SciPy spline interpolation')
     ax.legend(loc='lower left', ncol=2)
     plt.grid()
     plt.show()
@@ -269,6 +274,8 @@ def main():
     print_spline_equations(x_values.copy(), y_values.copy(), spline_coeffs.copy(), indexes.copy())
     show_plot(x_values=x_values.copy(), y_values=y_values.copy(), spline_coeffs=spline_coeffs.copy(),
               indexes=indexes.copy())
+    # SciPy spline
+    show_plot(x_values=x_values.copy(), y_values=y_values.copy(), scipy_flag=True)
 
 
 main()
