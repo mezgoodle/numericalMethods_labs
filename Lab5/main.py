@@ -284,7 +284,7 @@ def main():
     print(template.substitute(string='Coefficients'))
     print(np.array(newton_coeffs).round(5))
     print_newton_polynomial(x_values.copy(), newton_coeffs.copy())
-    show_plot(x_values=x_values.copy(), y_values=y_values.copy(), newton_coeffs=newton_coeffs)
+    show_plot(x_values=x_values.copy(), y_values=y_values.copy(), newton_coeffs=newton_coeffs.copy())
     # Cubic spline
     # x_values_2 = [2, 3, 5, 7]
     # y_values_2 = [4, -2, 6, -3]
