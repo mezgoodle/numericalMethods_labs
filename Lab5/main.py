@@ -93,15 +93,14 @@ def solve_newton_polynomial(newton_coeffs, x_values, x_value):
 def show_plot(x_values=None, y_values=None, newton_coeffs=None, spline_coeffs=None, indexes=None):
     x_axis = np.linspace(4, 12, num=10000)
     x_axis_2 = np.linspace(4, 12, num=2000)
-    plt.plot(x_axis, [linear_function(x) for x in x_axis], color='blue')
+    fig, ax = plt.subplots()
+    ax.plot(x_values, [2.01001 ,3.03286 ,2.34793 ,3.75752 ,2.55094], 'o', label='Data')
+    ax.plot(x_axis, [linear_function(x) for x in x_axis], label='Linear')
     if newton_coeffs is not None:
-        plt.plot(x_axis_2, [solve_newton_polynomial(newton_coeffs, x_values, x) for x in x_axis_2], color='green')
-        plt.legend(['Linear function', 'Newton Polynomial'])
+        ax.plot(x_axis_2, [solve_newton_polynomial(newton_coeffs, x_values, x) for x in x_axis_2], label='Newton Polynomial')
     elif spline_coeffs is not None:
-        plt.plot(x_axis_2, [solve_spline_equation(x_values, y_values, x, spline_coeffs, indexes) for x in x_axis_2], color='green')
-        plt.legend(['Linear function', 'Spline interpolation'])
-    else:
-        plt.legend(['Linear function'])
+        ax.plot(x_axis_2, [solve_spline_equation(x_values, y_values, x, spline_coeffs, indexes) for x in x_axis_2], label='Spline interpolation')
+    ax.legend(loc='lower left', ncol=2)
     plt.grid()
     plt.show()
 
