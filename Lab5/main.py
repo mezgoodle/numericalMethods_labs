@@ -106,7 +106,7 @@ def solve_newton_polynomial(newton_coeffs: list, x_values: list, x_value: float)
     return result
 
 
-def show_plot(x_values: list, y_values: list, newton_coeffs=None, spline_coeffs=None, indexes=None, scipy_flag=False) -> None:
+def show_plot(x_values: list, y_values: list, newton_coeffs=None, spline_coeffs=None, indexes=None, cubic_spline=None) -> None:
     """
     Function for creating plots
     :param x_values: our nodes
@@ -114,7 +114,7 @@ def show_plot(x_values: list, y_values: list, newton_coeffs=None, spline_coeffs=
     :param newton_coeffs: coefficients for newton polynomial
     :param spline_coeffs: coefficients for spline equations
     :param indexes: dictionary with indexes for spline equations
-    :param scipy_flag: flag to show plot with scipy
+    :param cubic_spline: CubicSpline class from SciPy
     :return: nothing to return
     """
     x_axis = np.linspace(4, 12, num=10000)
@@ -122,11 +122,10 @@ def show_plot(x_values: list, y_values: list, newton_coeffs=None, spline_coeffs=
     fig, ax = plt.subplots()
     ax.plot(x_values, y_values, 'o', label='Data')
     ax.plot(x_axis, [linear_function(x) for x in x_axis], label='Linear')
-    if scipy_flag:
-        cs = CubicSpline(x_values, y_values)
+    if cubic_spline is not None:
         ax.plot(x_axis_2, [solve_spline_equation(x_values, y_values, x, spline_coeffs, indexes) for x in x_axis_2],
                 label='Spline interpolation')
-        ax.plot(x_axis_2, cs(x_axis_2), label='SciPy spline interpolation')
+        ax.plot(x_axis_2, cubic_spline(x_axis_2), label='SciPy spline interpolation')
     elif newton_coeffs is not None:
         ax.plot(x_axis_2, [solve_newton_polynomial(newton_coeffs, x_values, x) for x in x_axis_2],
                 label='Newton Polynomial')
@@ -247,7 +246,7 @@ def solve_spline_equation(x_values: list, y_values: list, x_value: float, spline
                                x_value - x_values[i]) ** 3
 
 
-def get_faults(x_values: list, y_values: list, newton_coeffs: list, spline_coeffs: list, indexes: dict) -> None:
+def get_faults(x_values: list, y_values: list, newton_coeffs: list, spline_coeffs: list, indexes: dict, cubic_spline: CubicSpline) -> None:
     """
     Function that prints faults for math functions
     :param x_values: our nodes
@@ -255,14 +254,14 @@ def get_faults(x_values: list, y_values: list, newton_coeffs: list, spline_coeff
     :param newton_coeffs: coefficients for newton polynomial
     :param spline_coeffs: coefficients for spline equations
     :param indexes: dictionary with indexes for spline equations
+    :param cubic_spline: CubicSpline class from SciPy
     :return: nothing to return
     """
-    cs = CubicSpline(x_values, y_values)
     faults = {'newton': 0., 'spline': 0., 'scipy': 0.}
     for x_value in x_values:
         faults['newton'] += abs(solve_newton_polynomial(newton_coeffs, x_values, x_value) - linear_function(x_value))
         faults['spline'] += abs(solve_spline_equation(x_values, y_values, x_value, spline_coeffs, indexes) - linear_function(x_value))
-        faults['scipy'] += abs(cs(x_value) - linear_function(x_value))
+        faults['scipy'] += abs(cubic_spline(x_value) - linear_function(x_value))
     print(template.substitute(string='Faults'))
     print(template.substitute(string='Newton interpolation'))
     print(round(faults['newton'], 5))
@@ -302,9 +301,10 @@ def main():
     show_plot(x_values=x_values.copy(), y_values=y_values.copy(), spline_coeffs=spline_coeffs.copy(),
               indexes=indexes.copy())
     # SciPy spline
-    show_plot(x_values=x_values.copy(), y_values=y_values.copy(), spline_coeffs=spline_coeffs.copy(), indexes=indexes.copy(), scipy_flag=True)
+    cs = CubicSpline(x_values.copy(), y_values.copy())
+    show_plot(x_values=x_values.copy(), y_values=y_values.copy(), spline_coeffs=spline_coeffs.copy(), indexes=indexes.copy(), cubic_spline=cs)
     # Get faults
-    get_faults(x_values.copy(), y_values.copy(), newton_coeffs.copy(), spline_coeffs.copy(), indexes.copy())
+    get_faults(x_values.copy(), y_values.copy(), newton_coeffs.copy(), spline_coeffs.copy(), indexes.copy(), cs)
 
 
 main()
