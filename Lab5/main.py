@@ -257,19 +257,14 @@ def get_faults(x_values: list, y_values: list, newton_coeffs: list, spline_coeff
     :param cubic_spline: CubicSpline class from SciPy
     :return: nothing to return
     """
-    faults = {'newton': 0., 'spline': 0., 'scipy': 0.}
-    x_axis = np.linspace(4, 12, num=2000)
-    for x_value in x_axis:
-        faults['newton'] += abs(solve_newton_polynomial(newton_coeffs, x_values, x_value) - linear_function(x_value))
-        faults['spline'] += abs(solve_spline_equation(x_values, y_values, x_value, spline_coeffs, indexes) - linear_function(x_value))
-        faults['scipy'] += abs(cubic_spline(x_value) - linear_function(x_value))
+    x_axis = np.arange(4, 12.5, 0.5)
     print(template.substitute(string='Faults'))
-    print(template.substitute(string='Newton interpolation'))
-    print(round(faults['newton'], 5))
-    print(template.substitute(string='Cubic spline interpolation'))
-    print(round(faults['spline'], 3))
-    print(template.substitute(string='SciPy cubic spline interpolation'))
-    print(round(faults['scipy'], 5))
+    for x_value in x_axis:
+        print('X value:', x_value)
+        print('Newton polynomial', round(abs(solve_newton_polynomial(newton_coeffs, x_values, x_value) - linear_function(x_value)), 5))
+        print('Cubic spline', round(abs(solve_spline_equation(x_values, y_values, x_value, spline_coeffs, indexes) - linear_function(x_value)), 4))
+        print('SciPy cubic spline', round(abs(cubic_spline(x_value) - linear_function(x_value)), 5))
+        print()
 
 
 def main():
