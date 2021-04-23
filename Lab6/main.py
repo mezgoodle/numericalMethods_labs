@@ -86,63 +86,26 @@ class Polynomial:
         print(template.substitute(string='Newton method'))
         print(f'Answers: {answers}, iterations: {iterations}')
 
+    def chordsMethod(self):
+        answers = []
+        iterations = 0
+        for interval in self.intervals:
+            root = 1000
+            a, b = interval[0], interval[1]
+            while abs(b - a) > self.epsilon and abs(self.function.y(root)) > self.epsilon:
+                root = (a * self.function.y(b) - b * self.function.y(a)) / (self.function.y(b) - self.function.y(a))
+                if self.function.y(root) * self.function.y(a) <= 0:
+                    a, b = a, root
+                elif self.function.y(root) * self.function.y(b) <= 0:
+                    a, b = root, b
+                iterations += 1
+            answers.append(root)
+        print(template.substitute(string='Chords method'))
+        print(f'Answers: {answers}, iterations: {iterations}')
 
-polynomial = Polynomial(epsilon, intervals.copy(), StartFunctions())
+
+functions = StartFunctions()
+polynomial = Polynomial(epsilon, intervals.copy(), functions)
 polynomial.bisectionMethod()
 polynomial.newtonMethod()
-
-# def Bisection(i, f):
-#     counter = 0
-#     xs = []
-#     for k in range(len(i)):
-#         x = (i[k][0] + i[k][1]) / 2
-#         while math.fabs(f(x)) >= epsilon:
-#             counter += 1
-#             x = (i[k][0] + i[k][1]) / 2
-#             i[k][0], i[k][1] = (i[k][0], x) if f(i[k][0]) * f(x) < 0 else (x, i[k][1])
-#         xs.append((i[k][0] + i[k][1]) / 2)
-#     return xs, counter
-#
-#
-# bis, count1 = Bisection(intervals, y)
-#
-# print(f"Результати методу бiсекції: {bis}\nКiлькiсть iтерацiй: {count1}")
-#
-#
-# def Newton(i, f, f1):
-#     counter = 0
-#     xs = []
-#     for k in range(len(i)):
-#         x0 = (i[k][0] + i[k][1]) / 2
-#         x1 = x0 - (f(x0) / f1(x0))
-#         while True:
-#             counter += 1
-#             if math.fabs(x1 - x0) < epsilon:
-#                 xs.append(x1)
-#                 break
-#             x0 = x1
-#             x1 = x0 - (f(x0) / f1(x0))
-#     return xs, counter
-#
-#
-# new, count2 = Newton(intervals, y, y_pohidna)
-#
-# print(f"Результати методу Ньютона: {new}\nКiлькiсть iтерацiй: {count2}")
-#
-#
-# def Chorde(i, f):
-#     counter = 0
-#     xs = []
-#     for k in range(len(i)):
-#         x = i[k][0] + (f(i[k][1]) * (i[k][1] - i[k][0])) / (f(i[k][1]) - f(i[k][0]))
-#         while math.fabs(f(x)) >= epsilon:
-#             counter += 1
-#             x = i[k][0] + (f(i[k][1]) * (i[k][1] - i[k][0])) / (f(i[k][1]) - f(i[k][0]))
-#             i[k][0], i[k][1] = (i[k][0], x) if f(i[k][0]) * f(x) < 0 else (x, i[k][1])
-#         xs.append((i[k][0] + i[k][1]) / 2)
-#     return xs, counter
-#
-#
-# chor, count3 = Chorde(intervals, y)
-#
-# print(f"Результати методу хорд: {chor}\nКiлькiсть iтерацiй: {count3}")
+polynomial.chordsMethod()
