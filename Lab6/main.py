@@ -67,9 +67,29 @@ class Polynomial:
         print(template.substitute(string='Bisection method'))
         print(f'Answers: {answers}, iterations: {iterations}')
 
+    def newtonMethod(self):
+        answers = []
+        iterations = 0
+        for interval in self.intervals:
+            start_x = 0
+            a, b = interval[0], interval[1]
+            if self.function.y(a) * self.function.y_derivative(a) > 0:
+                start_x = a
+            else:
+                start_x = b
+            root = start_x - self.function.y(start_x) / self.function.y_derivative(start_x)
+            iterations += 1
+            while abs(self.function.y(root)) > self.epsilon:
+                root = root - self.function.y(root) / self.function.y_derivative(root)
+                iterations += 1
+            answers.append(root)
+        print(template.substitute(string='Newton method'))
+        print(f'Answers: {answers}, iterations: {iterations}')
+
 
 polynomial = Polynomial(epsilon, intervals.copy(), StartFunctions())
 polynomial.bisectionMethod()
+polynomial.newtonMethod()
 
 # def Bisection(i, f):
 #     counter = 0
