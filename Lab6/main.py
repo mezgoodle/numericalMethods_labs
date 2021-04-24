@@ -24,6 +24,7 @@ def y2(x):
 
 
 np_roots = np.roots([10, -3, 0, 7, 0, -27])
+print(np_roots)
 np_roots = np_roots[np.isreal(np_roots)]
 print(np_roots)
 
@@ -46,6 +47,12 @@ class Polynomial:
     def __init__(self, epsilon, intervals):
         self.epsilon = epsilon
         self.intervals = intervals
+
+    @classmethod
+    def printPolynomial(cls):
+        print(template.substitute(string='Start polynomial'))
+        polynom = np.polynomial.Polynomial([27, 0, 7, 0, -3, 10])
+        print(polynom)
 
     def bisectionMethod(self):
         answers = []
@@ -100,8 +107,9 @@ class Polynomial:
         print(template.substitute(string='Chords method'))
         print(f'Answers: {answers}, iterations: {iterations}')
 
-# functions = StartFunctions()
+
 polynomial = Polynomial(epsilon, intervals.copy())
+polynomial.printPolynomial()
 polynomial.bisectionMethod()
 polynomial.newtonMethod()
 polynomial.chordsMethod()
