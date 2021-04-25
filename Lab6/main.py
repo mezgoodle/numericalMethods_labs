@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from string import Template
-import math
+
 
 template = Template('#' * 10 + ' $string ' + '#' * 10)
-epsilon = 10 ** (-5)
+epsilon = 10 ** (-6)
 
 
 def y(x):
@@ -23,30 +23,16 @@ def y2(x):
     return 27 - 7 * x ** 2
 
 
-np_roots = np.roots([10, -3, 0, 7, 0, -27])
-print(np_roots)
-np_roots = np_roots[np.isreal(np_roots)]
-print(np_roots)
-
-x_axis = np.linspace(-2, 2, num=1000)
-x_axis_2 = np.linspace(-5, 5, num=1000)
-fig, ax = plt.subplots()
-ax.plot(x_axis, y1(x_axis), label='y1')
-ax.plot(x_axis_2, y2(x_axis_2), label='y2')
-
-ax.legend(loc='lower left', ncol=2)
-plt.grid()
-plt.show()
-
 intervals = [
     [1.1, 1.3]
 ]
 
 
 class Polynomial:
-    def __init__(self, epsilon, intervals):
+    def __init__(self, epsilon, intervals, roots):
         self.epsilon = epsilon
         self.intervals = intervals
+        self.roots = roots
 
     @classmethod
     def printPolynomial(cls):
@@ -70,6 +56,7 @@ class Polynomial:
             answers.append(root)
         print(template.substitute(string='Bisection method'))
         print(f'Answers: {answers}, iterations: {iterations}')
+        self.get_faults(answers, self.roots, 'bisection')
 
     def newtonMethod(self):
         answers = []
@@ -89,6 +76,7 @@ class Polynomial:
             answers.append(root)
         print(template.substitute(string='Newton method'))
         print(f'Answers: {answers}, iterations: {iterations}')
+        self.get_faults(answers, self.roots, 'newton')
 
     def chordsMethod(self):
         answers = []
@@ -106,10 +94,36 @@ class Polynomial:
             answers.append(root)
         print(template.substitute(string='Chords method'))
         print(f'Answers: {answers}, iterations: {iterations}')
+        self.get_faults(answers, self.roots, 'chords')
+
+    def get_faults(self, self_values, true_values, method):
+        print(template.substitute(string=f'Fault for {method} method'))
+        fault = 0
+        for index in range(len(self_values)):
+            fault = abs(true_values[index] - self_values[index])
+        print(round(fault, 6))
 
 
-polynomial = Polynomial(epsilon, intervals.copy())
+np_roots = np.roots([10, -3, 0, 7, 0, -27])
+print(template.substitute(string='All roots from NumPy'))
+print(np_roots)
+print(template.substitute(string='Real roots from NumPy'))
+np_roots = np_roots[np.isreal(np_roots)]
+print(np_roots)
+
+polynomial = Polynomial(epsilon, intervals.copy(), np_roots.copy())
 polynomial.printPolynomial()
 polynomial.bisectionMethod()
 polynomial.newtonMethod()
 polynomial.chordsMethod()
+
+x_axis = np.linspace(-2, 2, num=1000)
+x_axis_2 = np.linspace(-5, 5, num=1000)
+fig, ax = plt.subplots()
+ax.plot(x_axis, y(x_axis), label='y')
+ax.plot(x_axis, y1(x_axis), label='y1')
+ax.plot(x_axis_2, y2(x_axis_2), label='y2')
+
+ax.legend(loc='lower left', ncol=2)
+plt.grid()
+plt.show()
