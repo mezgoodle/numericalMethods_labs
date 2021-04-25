@@ -29,18 +29,26 @@ intervals = [
 
 
 class Polynomial:
-    def __init__(self, epsilon, intervals, roots):
+    def __init__(self, epsilon:float, intervals:list, roots:list):
         self.epsilon = epsilon
         self.intervals = intervals
         self.roots = roots
 
     @classmethod
-    def printPolynomial(cls):
+    def printPolynomial(cls) -> None:
+        """
+        Print polynomial as NumPy object, normal form
+        :return: nothing to return
+        """
         print(template.substitute(string='Start polynomial'))
         polynom = np.polynomial.Polynomial([27, 0, 7, 0, -3, 10])
         print(polynom)
 
-    def bisectionMethod(self):
+    def bisectionMethod(self) -> None:
+        """
+        Implementation of bisection method
+        :return: nothing to return
+        """
         answers = []
         iterations = 0
         for interval in self.intervals:
@@ -58,7 +66,11 @@ class Polynomial:
         print(f'Answers: {answers}, iterations: {iterations}')
         self.get_faults(answers, self.roots, 'bisection')
 
-    def newtonMethod(self):
+    def newtonMethod(self) -> None:
+        """
+        Implementation of Newton method
+        :return: nothing to return
+        """
         answers = []
         iterations = 0
         for interval in self.intervals:
@@ -78,7 +90,11 @@ class Polynomial:
         print(f'Answers: {answers}, iterations: {iterations}')
         self.get_faults(answers, self.roots, 'newton')
 
-    def chordsMethod(self):
+    def chordsMethod(self) -> None:
+        """
+        Implementation of chords method
+        :return: nothing to return
+        """
         answers = []
         iterations = 0
         for interval in self.intervals:
@@ -96,7 +112,14 @@ class Polynomial:
         print(f'Answers: {answers}, iterations: {iterations}')
         self.get_faults(answers, self.roots, 'chords')
 
-    def get_faults(self, self_values, true_values, method):
+    def get_faults(self, self_values: list, true_values: list, method: str) -> None:
+        """
+        Getting faults for all methods
+        :param self_values: roots from my methods
+        :param true_values: roots from NumPy
+        :param method: string for printing
+        :return:
+        """
         print(template.substitute(string=f'Fault for {method} method'))
         fault = 0
         for index in range(len(self_values)):
@@ -117,6 +140,7 @@ polynomial.bisectionMethod()
 polynomial.newtonMethod()
 polynomial.chordsMethod()
 
+# Showing plot with functions
 x_axis = np.linspace(-2, 2, num=1000)
 x_axis_2 = np.linspace(-5, 5, num=1000)
 fig, ax = plt.subplots()
