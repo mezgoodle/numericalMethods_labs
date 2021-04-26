@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.optimize
 import matplotlib.pyplot as plt
 from string import Template
 
@@ -29,10 +30,9 @@ intervals = [
 
 
 class Polynomial:
-    def __init__(self, epsilon:float, intervals:list, roots:list):
+    def __init__(self, epsilon:float, intervals:list):
         self.epsilon = epsilon
         self.intervals = intervals
-        self.roots = roots
 
     @classmethod
     def printPolynomial(cls) -> None:
@@ -64,7 +64,7 @@ class Polynomial:
             answers.append(root)
         print(template.substitute(string='Bisection method'))
         print(f'Answers: {answers}, iterations: {iterations}')
-        self.get_faults(answers, self.roots, 'bisection')
+        self.get_faults(answers, [scipy.optimize.bisect(y, self.intervals[0][0], self.intervals[0][1])], 'bisection')
 
     def newtonMethod(self) -> None:
         """
@@ -88,7 +88,7 @@ class Polynomial:
             answers.append(root)
         print(template.substitute(string='Newton method'))
         print(f'Answers: {answers}, iterations: {iterations}')
-        self.get_faults(answers, self.roots, 'newton')
+        self.get_faults(answers, [scipy.optimize.newton(y, intervals[0][0])], 'newton')
 
     def chordsMethod(self) -> None:
         """
@@ -110,7 +110,7 @@ class Polynomial:
             answers.append(root)
         print(template.substitute(string='Chords method'))
         print(f'Answers: {answers}, iterations: {iterations}')
-        self.get_faults(answers, self.roots, 'chords')
+        self.get_faults(answers, [scipy.optimize.bisect(y, self.intervals[0][0], self.intervals[0][1])], 'chords')
 
     def get_faults(self, self_values: list, true_values: list, method: str) -> None:
         """
@@ -134,7 +134,7 @@ print(template.substitute(string='Real roots from NumPy'))
 np_roots = np_roots[np.isreal(np_roots)]
 print(np_roots)
 
-polynomial = Polynomial(epsilon, intervals.copy(), np_roots.copy())
+polynomial = Polynomial(epsilon, intervals.copy())
 polynomial.printPolynomial()
 polynomial.bisectionMethod()
 polynomial.newtonMethod()
