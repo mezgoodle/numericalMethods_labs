@@ -34,15 +34,40 @@ def trapezium_method(a, b):
     return result * h
 
 
+def simpson_method(a, b):
+    parts, granic_fault = simpson_method_fault(a, b)
+    sum = main_func(a) + main_func(b)
+    width = (b - a) / (2 * parts)
+    firstPart = 0
+    secondPart = 0
+    for i in range(1, parts):
+        firstPart += main_func(2 * width * i + a) * 2
+    sum += firstPart
+    for i in range(1, parts + 1):
+        secondPart += main_func(width * (2 * i - 1) + a) * 4
+    sum += secondPart
+    return sum * width / 3
+
+
 def trapezium_method_fault(a, b):
     n = 1
     M = opt.fmin_l_bfgs_b(lambda x: -main_func_second(x), 1.0, bounds=[(a, b)], approx_grad=True)
-    fault = M[1][0] * ((b - a) ** 3) / (12 * n ** 2)
-    # print(fault)
+    fault = abs(M[1][0]) * ((b - a) ** 3) / (12 * n ** 2)
     while epsilon < fault:
-        fault = M[1][0] * ((b - a) ** 3) / (12 * n ** 2)
+        fault = abs(M[1][0]) * ((b - a) ** 3) / (12 * n ** 2)
+        n += 1
+    return n, fault
+
+
+def simpson_method_fault(a, b):
+    n = 1
+    M = opt.fmin_l_bfgs_b(lambda x: -main_func_fourth(x), 1.0, bounds=[(a, b)], approx_grad=True)
+    fault = abs(M[1][0]) * ((b - a) ** 5) / (180 * n ** 4)
+    while epsilon < fault:
+        fault = abs(M[1][0]) * ((b - a) ** 5) / (180 * n ** 4)
         n += 1
     return n, fault
 
 
 print(trapezium_method(a, b))
+print(simpson_method(a, b))
