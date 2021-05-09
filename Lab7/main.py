@@ -38,6 +38,7 @@ def simpson_method(a, b):
     parts, granic_fault = simpson_method_fault(a, b)
     sum = main_func(a) + main_func(b)
     width = (b - a) / (2 * parts)
+    print(parts)
     firstPart = 0
     secondPart = 0
     for i in range(1, parts):
