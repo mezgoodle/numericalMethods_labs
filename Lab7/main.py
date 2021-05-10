@@ -95,14 +95,14 @@ def main_function_sixteenth(x):
 np_integrate = integrate.quad(main_func, a, b)[0]
 
 
-def trapezium_method(a, b):
-    parts, analytical_fault = trapezium_method_fault(a, b)
-    result = (main_func(a) + main_func(b)) / 2
-    h = (b - a) / parts
+def trapezium_method(a_limit, b_limit):
+    parts, analytical_fault = trapezium_method_fault(a_limit, b_limit)
+    result = (main_func(a_limit) + main_func(b_limit)) / 2
+    h = (b_limit - a_limit) / parts
     print(f'N = {parts}')
     print(f'Analytical fault = {analytical_fault}')
-    index = a + h
-    while index < b:
+    index = a_limit + h
+    while index < b_limit:
         result += main_func(index)
         index += h
     real_fault = get_fault(result * h, np_integrate)
@@ -111,19 +111,19 @@ def trapezium_method(a, b):
     return result * h
 
 
-def simpson_method(a, b):
-    parts, analytical_fault = simpson_method_fault(a, b)
-    sum = main_func(a) + main_func(b)
-    width = (b - a) / (2 * parts)
+def simpson_method(a_limit, b_limit):
+    parts, analytical_fault = simpson_method_fault(a_limit, b_limit)
+    sum = main_func(a_limit) + main_func(b_limit)
+    width = (b_limit - a_limit) / (2 * parts)
     print(f'N = {parts}')
     print(f'Analytical fault = {analytical_fault}')
     firstPart = 0
     secondPart = 0
     for i in range(1, parts):
-        firstPart += main_func(2 * width * i + a) * 2
+        firstPart += main_func(2 * width * i + a_limit) * 2
     sum += firstPart
     for i in range(1, parts + 1):
-        secondPart += main_func(width * (2 * i - 1) + a) * 4
+        secondPart += main_func(width * (2 * i - 1) + a_limit) * 4
     sum += secondPart
     real_fault = get_fault(sum * width / 3, np_integrate)
     print(f'Real fault = {real_fault}')
@@ -131,47 +131,47 @@ def simpson_method(a, b):
     return sum * width / 3
 
 
-def gaussian_method(a, b):
-    parts, analytical_fault = gaussian_method_fault(a, b)
+def gaussian_method(a_limit, b_limit):
+    parts, analytical_fault = gaussian_method_fault(a_limit, b_limit)
     print(f'N = {parts}')
     print(f'Analytical fault = {analytical_fault}')
     result = 0
     for index in range(parts):
         result += coefficients[parts][f'c{index + 1}'] * main_func_reverse(coefficients[parts][f'x{index + 1}'])
-    real_fault = get_fault(result * ((b - a) / 2), np_integrate)
+    real_fault = get_fault(result * ((b_limit - a_limit) / 2), np_integrate)
     print(f'Real fault = {real_fault}')
     print(real_fault < analytical_fault)
-    return result * ((b - a) / 2)
+    return result * ((b_limit - a_limit) / 2)
 
 
-
-def trapezium_method_fault(a, b):
+def trapezium_method_fault(a_limit, b_limit):
     n = 1
-    M = opt.fmin_l_bfgs_b(lambda x: -main_func_second(x), 1.0, bounds=[(a, b)], approx_grad=True)
-    fault = abs(M[1][0]) * ((b - a) ** 3) / (12 * n ** 2)
+    M = opt.fmin_l_bfgs_b(lambda x: -main_func_second(x), 1.0, bounds=[(a_limit, b_limit)], approx_grad=True)
+    fault = abs(M[1][0]) * ((b_limit - a_limit) ** 3) / (12 * n ** 2)
     while epsilon < fault:
-        fault = abs(M[1][0]) * ((b - a) ** 3) / (12 * n ** 2)
+        fault = abs(M[1][0]) * ((b_limit - a_limit) ** 3) / (12 * n ** 2)
         n += 1
     return n, fault
 
 
-def simpson_method_fault(a, b):
+def simpson_method_fault(a_limit, b_limit):
     n = 1
-    M = opt.fmin_l_bfgs_b(lambda x: -main_func_fourth(x), 1.0, bounds=[(a, b)], approx_grad=True)
-    fault = abs(M[1][0]) * ((b - a) ** 5) / (180 * n ** 4)
+    M = opt.fmin_l_bfgs_b(lambda x: -main_func_fourth(x), 1.0, bounds=[(a_limit, b_limit)], approx_grad=True)
+    fault = abs(M[1][0]) * ((b_limit - a_limit) ** 5) / (180 * n ** 4)
     while epsilon < fault:
-        fault = abs(M[1][0]) * ((b - a) ** 5) / (180 * n ** 4)
+        fault = abs(M[1][0]) * ((b_limit - a_limit) ** 5) / (180 * n ** 4)
         n += 1
     return n, fault
 
 
-def gaussian_method_fault(a, b):
+def gaussian_method_fault(a_limit, b_limit):
     n = 2
     func_list = [main_func_fourth, main_func_sixth, main_function_eight, main_func_tenth, main_function_twelves,
                  main_func_fourteenth, main_function_sixteenth]
+    fault = 1
     for func in func_list:
-        M = opt.fmin_l_bfgs_b(lambda x: -func(x), 1.0, bounds=[(a, b)], approx_grad=True)
-        fault = abs(M[1][0]) * (((factorial(n)) ** 4) * (b - a) ** (2 * n + 1)) / (
+        M = opt.fmin_l_bfgs_b(lambda x: -func(x), 1.0, bounds=[(a_limit, b_limit)], approx_grad=True)
+        fault = abs(M[1][0]) * (((factorial(n)) ** 4) * (b_limit - a_limit) ** (2 * n + 1)) / (
                 (2 * n + 1) * (factorial(2 * n)) ** 3)
         if epsilon > fault:
             break
