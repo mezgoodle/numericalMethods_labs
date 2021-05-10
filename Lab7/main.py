@@ -116,6 +116,7 @@ def simpson_method(a, b):
     sum = main_func(a) + main_func(b)
     width = (b - a) / (2 * parts)
     print(f'N = {parts}')
+    print(f'Analytical fault = {analytic_fault}')
     firstPart = 0
     secondPart = 0
     for i in range(1, parts):
@@ -124,6 +125,9 @@ def simpson_method(a, b):
     for i in range(1, parts + 1):
         secondPart += main_func(width * (2 * i - 1) + a) * 4
     sum += secondPart
+    real_fault = get_fault(sum * width / 3, np_integrate)
+    print(f'Real fault = {real_fault}')
+    print(real_fault < analytic_fault)
     return sum * width / 3
 
 
