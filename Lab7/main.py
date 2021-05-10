@@ -28,43 +28,83 @@ coefficients = {
 }
 
 
-def main_func(x):
+def main_func(x: float) -> float:
+    """
+    Main function
+    :param x: argument
+    :return: value of function
+    """
     return cos(x) / (x + 1)
 
 
-def main_func_reverse(t):
+def main_func_reverse(t: float) -> float:
+    """
+    Main function
+    :param t: argument
+    :return: value of function
+    """
     x = ((a + b) / 2) + ((t * (b - a)) / 2)
     return cos(x) / (x + 1)
 
 
-def main_func_second(x):
+def main_func_second(x: float) -> float:
+    """
+    Main function second derivative
+    :param x: argument
+    :return: value of function
+    """
     return (-sin(x) / (x + 1)) - (cos(x) / (x + 1) ** 2)
 
 
-def main_func_fourth(x):
+def main_func_fourth(x: float) -> float:
+    """
+    Main function fourth derivative
+    :param x: argument
+    :return: value of function
+    """
     return (cos(x) - (4 * sin(x) / (x + 1)) - (12 * cos(x) / (x + 1) ** 2) + (24 * sin(x) / (x + 1) ** 3) + (
             24 * cos(x) / (x + 1) ** 4)) / (x + 1)
 
 
-def main_func_sixth(x):
+def main_func_sixth(x: float) -> float:
+    """
+    Main function sixth derivative
+    :param x: argument
+    :return: value of function
+    """
     return (-cos(x) + (6 * sin(x) / (x + 1)) + (30 * cos(x) / (x + 1) ** 2) - (120 * sin(x) / (x + 1) ** 3) - (
             360 * cos(x) / (x + 1) ** 4) + (720 * sin(x) / (x + 1) ** 5) + (720 * cos(x) / (x + 1) ** 6)) / (x + 1)
 
 
-def main_function_eight(x):
+def main_function_eight(x: float) -> float:
+    """
+    Main function eight derivative
+    :param x: argument
+    :return: value of function
+    """
     return (cos(x) - (8 * sin(x) / (x + 1)) - (56 * cos(x) / (x + 1) ** 2) + (336 * sin(x) / (x + 1) ** 3) + (
             1680 * cos(x) / (x + 1) ** 4) - (6720 * sin(x) / (x + 1) ** 5) - (20160 * cos(x) / (x + 1) ** 6) + (
                     40320 * sin(x) / (x + 1) ** 7) + (40320 * cos(x) / (x + 1) ** 8)) / (x + 1)
 
 
-def main_func_tenth(x):
+def main_func_tenth(x: float) -> float:
+    """
+    Main function tenth derivative
+    :param x: argument
+    :return: value of function
+    """
     return (-cos(x) + (10 * sin(x) / (x + 1)) + (90 * cos(x) / (x + 1) ** 2) - (720 * sin(x) / (x + 1) ** 3) - (
             5040 * cos(x) / (x + 1) ** 4) + (30240 * sin(x) / (x + 1) ** 5) + (151200 * cos(x) / (x + 1) ** 6) - (
                     604800 * sin(x) / (x + 1) ** 7) - (1814400 * cos(x) / (x + 1) ** 8) + (
                     3628800 * sin(x) / (x + 1) ** 9) + (3628800 * cos(x) / (x + 1) ** 10)) / (x + 1)
 
 
-def main_function_twelves(x):
+def main_function_twelves(x: float) -> float:
+    """
+    Main function twelves derivative
+    :param x: argument
+    :return: value of function
+    """
     return (cos(x) - (12 * sin(x) / (x + 1)) - (132 * cos(x) / (x + 1) ** 2) + (1320 * sin(x) / (x + 1) ** 3) + (
             1180 * cos(x) / (x + 1) ** 4) - (95040 * sin(x) / (x + 1) ** 5) - (665280 * cos(x) / (x + 1) ** 6) + (
                     3991680 * sin(x) / (x + 1) ** 7) + (19958400 * cos(x) / (x + 1) ** 8) - (
@@ -72,7 +112,12 @@ def main_function_twelves(x):
                     479001600 * sin(x) / (x + 1) ** 11) + (479001600 * cos(x) / (x + 1) ** 12)) / (x + 1)
 
 
-def main_func_fourteenth(x):
+def main_func_fourteenth(x: float) -> float:
+    """
+    Main function fourteenth derivative
+    :param x: argument
+    :return: value of function
+    """
     return (-cos(x) + (14 * sin(x) / (x + 1)) + (182 * cos(x) / (x + 1) ** 2) - (2184 * sin(x) / (x + 1) ** 3) - (
             24024 * cos(x) / (x + 1) ** 4) + (240240 * sin(x) / (x + 1) ** 5) + (2162160 * cos(x) / (x + 1) ** 6) - (
                     17297280 * sin(x) / (x + 1) ** 7) - (121080960 * cos(x) / (x + 1) ** 8) + (
@@ -81,7 +126,12 @@ def main_func_fourteenth(x):
                     87178291200 * sin(x) / (x + 1) ** 13) + (87178291200 * cos(x) / (x + 1) ** 14)) / (x + 1)
 
 
-def main_function_sixteenth(x):
+def main_function_sixteenth(x: float) -> float:
+    """
+    Main function sixteenth derivative
+    :param x: argument
+    :return: value of function
+    """
     return (cos(x) - (16 * sin(x) / (x + 1)) - (240 * cos(x) / (x + 1) ** 2) + (3360 * sin(x) / (x + 1) ** 3) + (
             43680 * cos(x) / (x + 1) ** 4) - (524160 * sin(x) / (x + 1) ** 5) - (
                     5765760 * cos(x) / (x + 1) ** 6) + (57657600 * sin(x) / (x + 1) ** 7) + (
@@ -95,7 +145,13 @@ def main_function_sixteenth(x):
 np_integrate = integrate.quad(main_func, a, b)[0]
 
 
-def trapezium_method(a_limit, b_limit):
+def trapezium_method(a_limit: float, b_limit: float) -> float:
+    """
+    Implementation of trapezium method
+    :param a_limit: left limit
+    :param b_limit: right limit
+    :return: result
+    """
     parts, analytical_fault = trapezium_method_fault(a_limit, b_limit)
     result = (main_func(a_limit) + main_func(b_limit)) / 2
     h = (b_limit - a_limit) / parts
@@ -111,7 +167,13 @@ def trapezium_method(a_limit, b_limit):
     return result * h
 
 
-def simpson_method(a_limit, b_limit):
+def simpson_method(a_limit: float, b_limit: float) -> float:
+    """
+    Implementation of simpson method
+    :param a_limit: left limit
+    :param b_limit: right limit
+    :return: result
+    """
     parts, analytical_fault = simpson_method_fault(a_limit, b_limit)
     result = main_func(a_limit) + main_func(b_limit)
     width = (b_limit - a_limit) / (2 * parts)
@@ -131,7 +193,13 @@ def simpson_method(a_limit, b_limit):
     return result * width / 3
 
 
-def gaussian_method(a_limit, b_limit):
+def gaussian_method(a_limit: float, b_limit: float) -> float:
+    """
+    Implementation of gaussian method
+    :param a_limit: left limit
+    :param b_limit: right limit
+    :return: result
+    """
     parts, analytical_fault = gaussian_method_fault(a_limit, b_limit)
     print(f'N = {parts}')
     print(f'Analytical fault = {analytical_fault}')
@@ -144,7 +212,13 @@ def gaussian_method(a_limit, b_limit):
     return result * ((b_limit - a_limit) / 2)
 
 
-def trapezium_method_fault(a_limit, b_limit):
+def trapezium_method_fault(a_limit: float, b_limit: float) -> [float, float]:
+    """
+    Get fault for trapezium method
+    :param a_limit: left limit
+    :param b_limit: right limit
+    :return: n and fault
+    """
     n = 1
     M = opt.fmin_l_bfgs_b(lambda x: -main_func_second(x), 1.0, bounds=[(a_limit, b_limit)], approx_grad=True)
     fault = abs(M[1][0]) * ((b_limit - a_limit) ** 3) / (12 * n ** 2)
@@ -154,7 +228,13 @@ def trapezium_method_fault(a_limit, b_limit):
     return n, fault
 
 
-def simpson_method_fault(a_limit, b_limit):
+def simpson_method_fault(a_limit: float, b_limit: float) -> [float, float]:
+    """
+    Get fault for simpson method
+    :param a_limit: left limit
+    :param b_limit: right limit
+    :return: n and fault
+    """
     n = 1
     M = opt.fmin_l_bfgs_b(lambda x: -main_func_fourth(x), 1.0, bounds=[(a_limit, b_limit)], approx_grad=True)
     fault = abs(M[1][0]) * ((b_limit - a_limit) ** 5) / (180 * n ** 4)
@@ -164,7 +244,13 @@ def simpson_method_fault(a_limit, b_limit):
     return n, fault
 
 
-def gaussian_method_fault(a_limit, b_limit):
+def gaussian_method_fault(a_limit: float, b_limit: float) -> [float, float]:
+    """
+    Get fault for gaussian method
+    :param a_limit: left limit
+    :param b_limit: right limit
+    :return: n and fault
+    """
     n = 2
     func_list = [main_func_fourth, main_func_sixth, main_function_eight, main_func_tenth, main_function_twelves,
                  main_func_fourteenth, main_function_sixteenth]
@@ -179,7 +265,13 @@ def gaussian_method_fault(a_limit, b_limit):
     return n, fault
 
 
-def get_fault(my_result, real_result):
+def get_fault(my_result: float, real_result: float) -> float:
+    """
+    Get real fault
+    :param my_result: result from my methods
+    :param real_result: result from NumPy
+    :return: real fault
+    """
     return abs(real_result - my_result)
 
 
