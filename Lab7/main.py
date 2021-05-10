@@ -1,5 +1,4 @@
-import numpy as np
-import scipy
+from scipy import integrate
 import scipy.optimize as opt
 from math import cos, sin, factorial
 from string import Template
@@ -93,23 +92,30 @@ def main_function_sixteenth(x):
                     20922789888000 * cos(x) / (x + 1) ** 16)) / (x + 1)
 
 
+np_integrate = integrate.quad(main_func, a, b)[0]
+
+
 def trapezium_method(a, b):
-    parts, granic_fault = trapezium_method_fault(a, b)
+    parts, analytic_fault = trapezium_method_fault(a, b)
     result = (main_func(a) + main_func(b)) / 2
     h = (b - a) / parts
-    print(parts)
+    print(f'N = {parts}')
+    print(f'Analytical fault = {analytic_fault}')
     index = a + h
     while index < b:
         result += main_func(index)
         index += h
+    real_fault = get_fault(result * h, np_integrate)
+    print(f'Real fault = {real_fault}')
+    print(real_fault < analytic_fault)
     return result * h
 
 
 def simpson_method(a, b):
-    parts, granic_fault = simpson_method_fault(a, b)
+    parts, analytic_fault = simpson_method_fault(a, b)
     sum = main_func(a) + main_func(b)
     width = (b - a) / (2 * parts)
-    print(parts)
+    print(f'N = {parts}')
     firstPart = 0
     secondPart = 0
     for i in range(1, parts):
@@ -122,8 +128,8 @@ def simpson_method(a, b):
 
 
 def gaussian_method(a, b):
-    parts, granic_fault = gaussian_method_fault(a, b)
-    print(parts)
+    parts, analitic_fault = gaussian_method_fault(a, b)
+    print(f'N = {parts}')
     result = 0
     for index in range(parts):
         result += coeffs[parts][f'c{index + 1}'] * main_func_reverse(coeffs[parts][f'x{index + 1}'])
@@ -164,6 +170,15 @@ def gaussian_method_fault(a, b):
     return n, fault
 
 
-print(trapezium_method(a, b))
-print(simpson_method(a, b))
-print(gaussian_method(a, b))
+def get_fault(my_result, real_result):
+    return abs(real_result - my_result)
+
+
+print(template.substitute(string='Trapezium method'))
+print(f'Result: {trapezium_method(a, b)}')
+print(template.substitute(string='Simpson method'))
+print(f'Result: {simpson_method(a, b)}')
+print(template.substitute(string='Gaussian method'))
+print(f'Result: {gaussian_method(a, b)}')
+print(template.substitute(string='Result from NumPy'))
+print(np_integrate)
