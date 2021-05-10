@@ -4,7 +4,7 @@ import scipy.optimize as opt
 from math import cos, sin
 from string import Template
 
-a, b = 0.8, 1.7
+a, b = 2, 5
 epsilon = 10 ** (-5)
 template = Template('#' * 10 + ' $string ' + '#' * 10)
 
@@ -40,6 +40,52 @@ def main_func_second(x):
 def main_func_fourth(x):
     return (cos(x) - (4 * sin(x) / (x + 1)) - (12 * cos(x) / (x + 1) ** 2) + (24 * sin(x) / (x + 1) ** 3) + (
             24 * cos(x) / (x + 1) ** 4)) / (x + 1)
+
+
+def main_func_sixth(x):
+    return (-cos(x) + (6 * sin(x) / (x + 1)) + (30 * cos(x) / (x + 1) ** 2) - (120 * sin(x) / (x + 1) ** 3) - (
+            360 * cos(x) / (x + 1) ** 4) + (720 * sin(x) / (x + 1) ** 5) + (720 * cos(x) / (x + 1) ** 6)) / (x + 1)
+
+
+def main_function_eight(x):
+    return (cos(x) - (8 * sin(x) / (x + 1)) - (56 * cos(x) / (x + 1) ** 2) + (336 * sin(x) / (x + 1) ** 3) + (
+            1680 * cos(x) / (x + 1) ** 4) - (6720 * sin(x) / (x + 1) ** 5) - (20160 * cos(x) / (x + 1) ** 6) + (
+                    40320 * sin(x) / (x + 1) ** 7) + (40320 * cos(x) / (x + 1) ** 8)) / (x + 1)
+
+
+def main_func_tenth(x):
+    return (-cos(x) + (10 * sin(x) / (x + 1)) + (90 * cos(x) / (x + 1) ** 2) - (720 * sin(x) / (x + 1) ** 3) - (
+            5040 * cos(x) / (x + 1) ** 4) + (30240 * sin(x) / (x + 1) ** 5) + (151200 * cos(x) / (x + 1) ** 6) - (
+                    604800 * sin(x) / (x + 1) ** 7) - (1814400 * cos(x) / (x + 1) ** 8) + (
+                    3628800 * sin(x) / (x + 1) ** 9) + (3628800 * cos(x) / (x + 1) ** 10)) / (x + 1)
+
+
+def main_function_twelveth(x):
+    return (cos(x) - (12 * sin(x) / (x + 1)) - (132 * cos(x) / (x + 1) ** 2) + (1320 * sin(x) / (x + 1) ** 3) + (
+            1180 * cos(x) / (x + 1) ** 4) - (95040 * sin(x) / (x + 1) ** 5) - (665280 * cos(x) / (x + 1) ** 6) + (
+                    3991680 * sin(x) / (x + 1) ** 7) + (19958400 * cos(x) / (x + 1) ** 8) - (
+                    79833600 * sin(x) / (x + 1) ** 9) - (239500800 * cos(x) / (x + 1) ** 10) + (
+                    479001600 * sin(x) / (x + 1) ** 11) + (479001600 * cos(x) / (x + 1) ** 12)) / (x + 1)
+
+
+def main_func_fourteenth(x):
+    return (-cos(x) + (14 * sin(x) / (x + 1)) + (182 * cos(x) / (x + 1) ** 2) - (2184 * sin(x) / (x + 1) ** 3) - (
+            24024 * cos(x) / (x + 1) ** 4) + (240240 * sin(x) / (x + 1) ** 5) + (2162160 * cos(x) / (x + 1) ** 6) - (
+                    17297280 * sin(x) / (x + 1) ** 7) - (121080960 * cos(x) / (x + 1) ** 8) + (
+                    726485760 * sin(x) / (x + 1) ** 9) + (3632428800 * cos(x) / (x + 1) ** 10) - (
+                    14529715200 * sin(x) / (x + 1) ** 11) - (43589145600 * cos(x) / (x + 1) ** 12) + (
+                    87178291200 * sin(x) / (x + 1) ** 13) + (87178291200 * cos(x) / (x + 1) ** 14)) / (x + 1)
+
+
+def main_function_sixteenth(x):
+    return (cos(x) - (16 * sin(x) / (x + 1)) - (240 * cos(x) / (x + 1) ** 2) + (3360 * sin(x) / (x + 1) ** 3) + (
+                43680 * cos(x) / (x + 1) ** 4) - (524160 * sin(x) / (x + 1) ** 5) - (
+                        5765760 * cos(x) / (x + 1) ** 6) + (57657600 * sin(x) / (x + 1) ** 7) + (
+                        518918400 * cos(x) / (x + 1) ** 8) - (4151347200 * sin(x) / (x + 1) ** 9) - (
+                        29059430400 * cos(x) / (x + 1) ** 10) + (174356582400 * sin(x) / (x + 1) ** 11) + (
+                        871782912000 * cos(x) / (x + 1) ** 12) - (3487131648000 * cos(x) / (x + 1) ** 13) + (
+                        10461394944000 * cos(x) / (x + 1) ** 14) + (20922789888000 * cos(x) / (x + 1) ** 15) + (
+                        20922789888000 * cos(x) / (x + 1) ** 16)) / (x + 1)
 
 
 def trapezium_method(a, b):
@@ -107,8 +153,10 @@ def simpson_method_fault(a, b):
 
 
 def gaussian_method_fault(a, b):
-    n = 1
-    M = opt.fmin_l_bfgs_b(lambda x: -main_func_fourth(x), 1.0, bounds=[(a, b)], approx_grad=True)
+    n = 2
+    func_list = [main_func_fourth, main_func_sixth, main_func_tenth, main_func_fourteenth]
+    for func in func_list:
+        M = opt.fmin_l_bfgs_b(lambda x: -func(x), 1.0, bounds=[(a, b)], approx_grad=True)
     fault = abs(M[1][0]) * ((b - a) ** 5) / (180 * n ** 4)
     while epsilon < fault:
         fault = abs(M[1][0]) * ((b - a) ** 5) / (180 * n ** 4)
