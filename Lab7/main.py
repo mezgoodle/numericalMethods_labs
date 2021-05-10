@@ -132,12 +132,17 @@ def simpson_method(a, b):
 
 
 def gaussian_method(a, b):
-    parts, analitic_fault = gaussian_method_fault(a, b)
+    parts, analytic_fault = gaussian_method_fault(a, b)
     print(f'N = {parts}')
+    print(f'Analytical fault = {analytic_fault}')
     result = 0
     for index in range(parts):
         result += coeffs[parts][f'c{index + 1}'] * main_func_reverse(coeffs[parts][f'x{index + 1}'])
+    real_fault = get_fault(result * ((b - a) / 2), np_integrate)
+    print(f'Real fault = {real_fault}')
+    print(real_fault < analytic_fault)
     return result * ((b - a) / 2)
+
 
 
 def trapezium_method_fault(a, b):
