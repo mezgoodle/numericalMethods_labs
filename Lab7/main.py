@@ -34,7 +34,8 @@ def main_func(x):
 
 
 def main_func_reverse(t):
-    return ((a + b) / 2) + ((t * (b - a)) / 2)
+    x = ((a + b) / 2) + ((t * (b - a)) / 2)
+    return cos(x) / (x + 1)
 
 
 def main_func_second(x):
@@ -125,10 +126,8 @@ def gaussian_method(a, b):
     print(parts)
     result = 0
     for index in range(parts):
-        print(coeffs[parts][f'c{index + 1}'], coeffs[parts][f'x{index + 1}'])
-        print()
         result += coeffs[parts][f'c{index + 1}'] * main_func_reverse(coeffs[parts][f'x{index + 1}'])
-    return result * 2
+    return result * ((b - a) / 2)
 
 
 def trapezium_method_fault(a, b):
