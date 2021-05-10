@@ -64,7 +64,7 @@ def main_func_tenth(x):
                     3628800 * sin(x) / (x + 1) ** 9) + (3628800 * cos(x) / (x + 1) ** 10)) / (x + 1)
 
 
-def main_function_twelveth(x):
+def main_function_twelves(x):
     return (cos(x) - (12 * sin(x) / (x + 1)) - (132 * cos(x) / (x + 1) ** 2) + (1320 * sin(x) / (x + 1) ** 3) + (
             1180 * cos(x) / (x + 1) ** 4) - (95040 * sin(x) / (x + 1) ** 5) - (665280 * cos(x) / (x + 1) ** 6) + (
                     3991680 * sin(x) / (x + 1) ** 7) + (19958400 * cos(x) / (x + 1) ** 8) - (
@@ -167,7 +167,7 @@ def simpson_method_fault(a, b):
 
 def gaussian_method_fault(a, b):
     n = 2
-    func_list = [main_func_fourth, main_func_sixth, main_function_eight, main_func_tenth, main_function_twelveth,
+    func_list = [main_func_fourth, main_func_sixth, main_function_eight, main_func_tenth, main_function_twelves,
                  main_func_fourteenth, main_function_sixteenth]
     for func in func_list:
         M = opt.fmin_l_bfgs_b(lambda x: -func(x), 1.0, bounds=[(a, b)], approx_grad=True)
