@@ -7,7 +7,7 @@ a, b = 0.8, 1.7
 epsilon = 10 ** (-5)
 template = Template('#' * 10 + ' $string ' + '#' * 10)
 
-coeffs = {
+coefficients = {
     1: {'x1': 0.5, 'c1': 2},
     2: {'x1': -0.577350, 'x2': 0.577350, 'c1': 1, 'c2': 1},
     3: {'x1': -0.774597, 'x2': 0, 'x3': 0.774597, 'c1': 0.555555, 'c2': 0.888889, 'c3': 0.555555},
@@ -96,27 +96,27 @@ np_integrate = integrate.quad(main_func, a, b)[0]
 
 
 def trapezium_method(a, b):
-    parts, analytic_fault = trapezium_method_fault(a, b)
+    parts, analytical_fault = trapezium_method_fault(a, b)
     result = (main_func(a) + main_func(b)) / 2
     h = (b - a) / parts
     print(f'N = {parts}')
-    print(f'Analytical fault = {analytic_fault}')
+    print(f'Analytical fault = {analytical_fault}')
     index = a + h
     while index < b:
         result += main_func(index)
         index += h
     real_fault = get_fault(result * h, np_integrate)
     print(f'Real fault = {real_fault}')
-    print(real_fault < analytic_fault)
+    print(real_fault < analytical_fault)
     return result * h
 
 
 def simpson_method(a, b):
-    parts, analytic_fault = simpson_method_fault(a, b)
+    parts, analytical_fault = simpson_method_fault(a, b)
     sum = main_func(a) + main_func(b)
     width = (b - a) / (2 * parts)
     print(f'N = {parts}')
-    print(f'Analytical fault = {analytic_fault}')
+    print(f'Analytical fault = {analytical_fault}')
     firstPart = 0
     secondPart = 0
     for i in range(1, parts):
@@ -127,20 +127,20 @@ def simpson_method(a, b):
     sum += secondPart
     real_fault = get_fault(sum * width / 3, np_integrate)
     print(f'Real fault = {real_fault}')
-    print(real_fault < analytic_fault)
+    print(real_fault < analytical_fault)
     return sum * width / 3
 
 
 def gaussian_method(a, b):
-    parts, analytic_fault = gaussian_method_fault(a, b)
+    parts, analytical_fault = gaussian_method_fault(a, b)
     print(f'N = {parts}')
-    print(f'Analytical fault = {analytic_fault}')
+    print(f'Analytical fault = {analytical_fault}')
     result = 0
     for index in range(parts):
-        result += coeffs[parts][f'c{index + 1}'] * main_func_reverse(coeffs[parts][f'x{index + 1}'])
+        result += coefficients[parts][f'c{index + 1}'] * main_func_reverse(coefficients[parts][f'x{index + 1}'])
     real_fault = get_fault(result * ((b - a) / 2), np_integrate)
     print(f'Real fault = {real_fault}')
-    print(real_fault < analytic_fault)
+    print(real_fault < analytical_fault)
     return result * ((b - a) / 2)
 
 
