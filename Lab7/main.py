@@ -1,10 +1,10 @@
 import numpy as np
 import scipy
 import scipy.optimize as opt
-from math import cos, sin
+from math import cos, sin, factorial
 from string import Template
 
-a, b = 2, 5
+a, b = 0.8, 1.7
 epsilon = 10 ** (-5)
 template = Template('#' * 10 + ' $string ' + '#' * 10)
 
@@ -31,6 +31,10 @@ coeffs = {
 
 def main_func(x):
     return cos(x) / (x + 1)
+
+
+def main_func_reverse(t):
+    return ((a + b) / 2) + ((t * (b - a)) / 2)
 
 
 def main_func_second(x):
@@ -79,13 +83,13 @@ def main_func_fourteenth(x):
 
 def main_function_sixteenth(x):
     return (cos(x) - (16 * sin(x) / (x + 1)) - (240 * cos(x) / (x + 1) ** 2) + (3360 * sin(x) / (x + 1) ** 3) + (
-                43680 * cos(x) / (x + 1) ** 4) - (524160 * sin(x) / (x + 1) ** 5) - (
-                        5765760 * cos(x) / (x + 1) ** 6) + (57657600 * sin(x) / (x + 1) ** 7) + (
-                        518918400 * cos(x) / (x + 1) ** 8) - (4151347200 * sin(x) / (x + 1) ** 9) - (
-                        29059430400 * cos(x) / (x + 1) ** 10) + (174356582400 * sin(x) / (x + 1) ** 11) + (
-                        871782912000 * cos(x) / (x + 1) ** 12) - (3487131648000 * cos(x) / (x + 1) ** 13) + (
-                        10461394944000 * cos(x) / (x + 1) ** 14) + (20922789888000 * cos(x) / (x + 1) ** 15) + (
-                        20922789888000 * cos(x) / (x + 1) ** 16)) / (x + 1)
+            43680 * cos(x) / (x + 1) ** 4) - (524160 * sin(x) / (x + 1) ** 5) - (
+                    5765760 * cos(x) / (x + 1) ** 6) + (57657600 * sin(x) / (x + 1) ** 7) + (
+                    518918400 * cos(x) / (x + 1) ** 8) - (4151347200 * sin(x) / (x + 1) ** 9) - (
+                    29059430400 * cos(x) / (x + 1) ** 10) + (174356582400 * sin(x) / (x + 1) ** 11) + (
+                    871782912000 * cos(x) / (x + 1) ** 12) - (3487131648000 * cos(x) / (x + 1) ** 13) + (
+                    10461394944000 * cos(x) / (x + 1) ** 14) + (20922789888000 * cos(x) / (x + 1) ** 15) + (
+                    20922789888000 * cos(x) / (x + 1) ** 16)) / (x + 1)
 
 
 def trapezium_method(a, b):
@@ -117,19 +121,14 @@ def simpson_method(a, b):
 
 
 def gaussian_method(a, b):
-    parts, granic_fault = simpson_method_fault(a, b)
-    sum = main_func(a) + main_func(b)
-    width = (b - a) / (2 * parts)
+    parts, granic_fault = gaussian_method_fault(a, b)
     print(parts)
-    firstPart = 0
-    secondPart = 0
-    for i in range(1, parts):
-        firstPart += main_func(2 * width * i + a) * 2
-    sum += firstPart
-    for i in range(1, parts + 1):
-        secondPart += main_func(width * (2 * i - 1) + a) * 4
-    sum += secondPart
-    return sum * width / 3
+    result = 0
+    for index in range(parts):
+        print(coeffs[parts][f'c{index + 1}'], coeffs[parts][f'x{index + 1}'])
+        print()
+        result += coeffs[parts][f'c{index + 1}'] * main_func_reverse(coeffs[parts][f'x{index + 1}'])
+    return result * 2
 
 
 def trapezium_method_fault(a, b):
@@ -154,15 +153,18 @@ def simpson_method_fault(a, b):
 
 def gaussian_method_fault(a, b):
     n = 2
-    func_list = [main_func_fourth, main_func_sixth, main_func_tenth, main_func_fourteenth]
+    func_list = [main_func_fourth, main_func_sixth, main_function_eight, main_func_tenth, main_function_twelveth,
+                 main_func_fourteenth, main_function_sixteenth]
     for func in func_list:
         M = opt.fmin_l_bfgs_b(lambda x: -func(x), 1.0, bounds=[(a, b)], approx_grad=True)
-    fault = abs(M[1][0]) * ((b - a) ** 5) / (180 * n ** 4)
-    while epsilon < fault:
-        fault = abs(M[1][0]) * ((b - a) ** 5) / (180 * n ** 4)
+        fault = abs(M[1][0]) * (((factorial(n)) ** 4) * (b - a) ** (2 * n + 1)) / (
+                (2 * n + 1) * (factorial(2 * n)) ** 3)
+        if epsilon > fault:
+            break
         n += 1
     return n, fault
 
 
 print(trapezium_method(a, b))
 print(simpson_method(a, b))
+print(gaussian_method(a, b))
