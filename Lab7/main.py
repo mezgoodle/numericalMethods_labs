@@ -176,21 +176,21 @@ def simpson_method(a_limit: float, b_limit: float) -> float:
     """
     parts, analytical_fault = simpson_method_fault(a_limit, b_limit)
     result = main_func(a_limit) + main_func(b_limit)
-    width = (b_limit - a_limit) / (2 * parts)
+    h = (b_limit - a_limit) / (2 * parts)
     print(f'N = {parts}')
     print(f'Analytical fault = {analytical_fault}')
     firstPart = 0
     secondPart = 0
     for i in range(1, parts):
-        firstPart += main_func(2 * width * i + a_limit) * 2
+        firstPart += main_func(2 * h * i + a_limit) * 2
     result += firstPart
     for i in range(1, parts + 1):
-        secondPart += main_func(width * (2 * i - 1) + a_limit) * 4
+        secondPart += main_func(h * (2 * i - 1) + a_limit) * 4
     result += secondPart
-    real_fault = get_fault(result * width / 3, np_integrate)
+    real_fault = get_fault(result * h / 3, np_integrate)
     print(f'Real fault = {real_fault}')
     print(real_fault < analytical_fault)
-    return result * width / 3
+    return result * h / 3
 
 
 def gaussian_method(a_limit: float, b_limit: float) -> float:
