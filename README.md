@@ -30,6 +30,10 @@ There are main files, that used in every lab
 
 * [Sixth lab](https://github.com/mezgoodle/numericalMethods_labs/tree/master/Lab6)
 
+* [Seventh lab](https://github.com/mezgoodle/numericalMethods_labs/tree/master/Lab7)
+
+* [Eighth lab](https://github.com/mezgoodle/numericalMethods_labs/tree/master/Lab8)
+
 ## Note
 
 The first lab is different from another.
