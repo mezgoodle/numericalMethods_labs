@@ -23,7 +23,7 @@ def dfunction(x: float, y: float) -> float:
 
 
 def runge_kutte_method(interval, h, epsilon, x0, y0):
-    rg_res = []
+    rg_res = [[x0, y0]]
     table = []
     table.append([x0, y0, 0, 0])
     xi = x0
@@ -64,10 +64,10 @@ def adams_method(interval, h, epsilon, rg_res):
         if fault > epsilon:
             step / 2
         if extra_y == intra_y:
-            table.append([rg_res[i][0], extra_y, fault])
+            table.append([next_x, extra_y, fault])
             rg_res.append([next_x, extra_y])
         else:
-            table.append([rg_res[i][0], intra_y, fault])
+            table.append([next_x, intra_y, fault])
             rg_res.append([next_x, intra_y])
         i += 1
     print_table(table, ('x', 'y', 'Fault'))
