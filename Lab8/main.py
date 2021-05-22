@@ -2,6 +2,22 @@
 from tabulate import tabulate
 import pandas as pd
 import numpy as np
+from math import e
+
+n = 5
+a = b = 1 + 0.4 * n
+interval = [0, 4]
+h = 0.1
+
+
+def dfunction(x: float, y: float) -> float:
+    """
+    Main diff function
+    :param x: x-argument
+    :param y: y-argument
+    :return: result
+    """
+    return e ** (-a * x) * (y ** 2 + b)
 
 
 def prepare_table(length):
