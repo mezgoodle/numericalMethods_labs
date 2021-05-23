@@ -39,15 +39,12 @@ def runge_kutte_method(interval, h, epsilon, x0, y0):
         fault = abs((k2 - k3) / (k1 - k2))
         if fault > epsilon:
             h /= 2
-        # error = delta_y - (dfunction(xi + h)) / h
         table.append([xi, yi])
         rg_res.append([xi, yi])
     errors = search_error_for_rg(rg_res, h)
     for i in range(len(errors)):
         table[i+1].append(errors[i])
-        # print(t)
-        # table[i].append(errors[i])
-    print_table(table, ('x', 'y', 'Delta'))
+    print_table(table, ('x', 'y', 'Error'))
     return rg_res
 
 
@@ -76,7 +73,7 @@ def adams_method(interval, h, epsilon, rg_res):
             table.append([next_x, intra_y, fault])
             rg_res.append([next_x, intra_y])
         i += 1
-    print_table(table, ('x', 'y', 'Fault'))
+    print_table(table, ('x', 'y', 'Error'))
     return rg_res
 
 
