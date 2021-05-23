@@ -1,5 +1,6 @@
 from tabulate import tabulate
 import pandas as pd
+import matplotlib.pyplot as plt
 from string import Template
 from math import e
 
@@ -20,6 +21,26 @@ def dfunction(x: float, y: float) -> float:
     :return: result
     """
     return e ** (-a * x) * (y ** 2 + b)
+
+
+def show_plot(x_values: list, y_values: list) -> None:
+    """
+    Function for creating plots
+    :param x_values: our nodes
+    :param y_values: values at this nodes
+    :param newton_coeffs: coefficients for newton polynomial
+    :param spline_coeffs: coefficients for spline equations
+    :param indexes: dictionary with indexes for spline equations
+    :param cubic_spline: CubicSpline class from SciPy
+    :return: nothing to return
+    """
+    fig, ax = plt.subplots()
+    ax.plot(x_values, y_values, 'o', label='Data')
+    ax.plot(x_axis, [linear_function(x) for x in x_axis], label='Linear')
+    ax.legend(loc='lower left', ncol=2)
+    plt.grid()
+    plt.show()
+
 
 
 def runge_kutte_method(interval, h, epsilon, x0, y0):
