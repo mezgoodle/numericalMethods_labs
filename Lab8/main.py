@@ -25,7 +25,7 @@ def dfunction(x: float, y: float) -> float:
 def runge_kutte_method(interval, h, epsilon, x0, y0):
     rg_res = [[x0, y0]]
     table = []
-    table.append([x0, y0])
+    table.append([x0, y0, 0])
     xi = x0
     yi = y0
     while xi < interval[1]:
@@ -42,7 +42,12 @@ def runge_kutte_method(interval, h, epsilon, x0, y0):
         # error = delta_y - (dfunction(xi + h)) / h
         table.append([xi, yi])
         rg_res.append([xi, yi])
-    print_table(table, ('x', 'y'))
+    errors = search_error_for_rg(rg_res, h)
+    for i in range(len(errors)):
+        table[i+1].append(errors[i])
+        # print(t)
+        # table[i].append(errors[i])
+    print_table(table, ('x', 'y', 'Delta'))
     return rg_res
 
 
@@ -73,6 +78,20 @@ def adams_method(interval, h, epsilon, rg_res):
         i += 1
     print_table(table, ('x', 'y', 'Fault'))
     return rg_res
+
+
+def search_error_for_rg(rg_res, h):
+    errors = []
+    for i in range(len(rg_res) - 1):
+        k1 = dfunction(rg_res[i][0], rg_res[i][1])
+        k2 = dfunction(rg_res[i][0] + h / 2, rg_res[i][1])
+        k3 = dfunction(rg_res[i][0] + h / 2, rg_res[i][1])
+        k4 = dfunction(rg_res[i][0] + h, rg_res[i][1])
+        delta_y = (k1 + 2 * k2 + 2 * k3 + k4) / 6
+        right_part = (rg_res[i + 1][1] - rg_res[i][1]) / h
+        error = delta_y - right_part
+        errors.append(error)
+    return errors
 
 
 def print_table(table: list, headers: tuple):
