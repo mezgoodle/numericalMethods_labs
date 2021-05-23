@@ -91,6 +91,20 @@ def search_error_for_rg(rg_res, h):
     return errors
 
 
+def search_error_for_ad(ad_res, ad_res_less, h):
+    errors = []
+    for i in range(len(rg_res) - 1):
+        k1 = dfunction(rg_res[i][0], rg_res[i][1])
+        k2 = dfunction(rg_res[i][0] + h / 2, rg_res[i][1])
+        k3 = dfunction(rg_res[i][0] + h / 2, rg_res[i][1])
+        k4 = dfunction(rg_res[i][0] + h, rg_res[i][1])
+        delta_y = (k1 + 2 * k2 + 2 * k3 + k4) / 6
+        right_part = (rg_res[i + 1][1] - rg_res[i][1]) / h
+        error = delta_y - right_part
+        errors.append(error)
+    return errors
+
+
 def print_table(table: list, headers: tuple):
     df = pd.DataFrame(table)
     print(tabulate(df, headers=headers, tablefmt='github'))
