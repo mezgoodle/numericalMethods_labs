@@ -25,7 +25,7 @@ def dfunction(x: float, y: float) -> float:
 def runge_kutte_method(interval, h, epsilon, x0, y0):
     rg_res = [[x0, y0]]
     table = []
-    table.append([x0, y0, 0, 0])
+    table.append([x0, y0])
     xi = x0
     yi = y0
     while xi < interval[1]:
@@ -39,9 +39,10 @@ def runge_kutte_method(interval, h, epsilon, x0, y0):
         fault = abs((k2 - k3) / (k1 - k2))
         if fault > epsilon:
             h /= 2
-        table.append([xi, yi, delta_y, fault])
+        # error = delta_y - (dfunction(xi + h)) / h
+        table.append([xi, yi])
         rg_res.append([xi, yi])
-    print_table(table, ('x', 'y', 'Delta y', 'Fault'))
+    print_table(table, ('x', 'y'))
     return rg_res
 
 
@@ -71,6 +72,7 @@ def adams_method(interval, h, epsilon, rg_res):
             rg_res.append([next_x, intra_y])
         i += 1
     print_table(table, ('x', 'y', 'Fault'))
+    return rg_res
 
 
 def print_table(table: list, headers: tuple):
@@ -81,4 +83,4 @@ def print_table(table: list, headers: tuple):
 print(template.substitute(string='Runge-kutta method'))
 rg_res = runge_kutte_method(interval, h, epsilon, x0, y0)
 print(template.substitute(string='Adams method'))
-adams_method(interval, h, epsilon, rg_res[:4])
+ad_res = adams_method(interval, h, epsilon, rg_res[:4])
