@@ -41,18 +41,15 @@ def runge_kutte_method(interval, h, epsilon, x0, y0):
             h /= 2
         table.append([xi, yi])
         rg_res.append([xi, yi])
-    errors = search_error_for_rg(rg_res, h)
-    for i in range(len(errors)):
-        table[i+1].append(errors[i])
-    print_table(table, ('x', 'y', 'Error'))
-    return rg_res
+    return rg_res, table
 
 
 def adams_method(interval, h, epsilon, rg_res):
     table = []
-    table.append([rg_res[0][0], rg_res[0][1], 0])
-    table.append([rg_res[1][0], rg_res[1][1], 0])
-    table.append([rg_res[2][0], rg_res[2][1], 0])
+    table.append([rg_res[0][0], rg_res[0][1]])
+    table.append([rg_res[1][0], rg_res[1][1]])
+    table.append([rg_res[2][0], rg_res[2][1]])
+    table.append([rg_res[3][0], rg_res[3][1]])
     i = 3
     step = h
     while i < ((interval[1] - interval[0]) / h):
@@ -70,11 +67,10 @@ def adams_method(interval, h, epsilon, rg_res):
             table.append([next_x, extra_y, fault])
             rg_res.append([next_x, extra_y])
         else:
-            table.append([next_x, intra_y, fault])
+            table.append([next_x, intra_y])
             rg_res.append([next_x, intra_y])
         i += 1
-    print_table(table, ('x', 'y', 'Error'))
-    return rg_res
+    return rg_res, table
 
 
 def search_error_for_rg(rg_res, h):
@@ -91,16 +87,10 @@ def search_error_for_rg(rg_res, h):
     return errors
 
 
-def search_error_for_ad(ad_res, ad_res_less, h):
+def search_error_for_ad(ad_res, ad_res_less):
     errors = []
-    for i in range(len(rg_res) - 1):
-        k1 = dfunction(rg_res[i][0], rg_res[i][1])
-        k2 = dfunction(rg_res[i][0] + h / 2, rg_res[i][1])
-        k3 = dfunction(rg_res[i][0] + h / 2, rg_res[i][1])
-        k4 = dfunction(rg_res[i][0] + h, rg_res[i][1])
-        delta_y = (k1 + 2 * k2 + 2 * k3 + k4) / 6
-        right_part = (rg_res[i + 1][1] - rg_res[i][1]) / h
-        error = delta_y - right_part
+    for i in range(len(ad_res)):
+        error = (ad_res[i][1] - ad_res_less[i * 2][1]) / (16 - 1)
         errors.append(error)
     return errors
 
@@ -111,6 +101,16 @@ def print_table(table: list, headers: tuple):
 
 
 print(template.substitute(string='Runge-kutta method'))
-rg_res = runge_kutte_method(interval, h, epsilon, x0, y0)
+rg_res, table = runge_kutte_method(interval, h, epsilon, x0, y0)
+rg_res_less, table_ = runge_kutte_method(interval, h / 2, epsilon, x0, y0)
+errors = search_error_for_ad(rg_res, rg_res_less)
+for i in range(1, len(errors)):
+    table[i].append(abs(errors[i]))
+print_table(table, ('x', 'y', 'Error'))
 print(template.substitute(string='Adams method'))
-ad_res = adams_method(interval, h, epsilon, rg_res[:4])
+ad_res, table_finish = adams_method(interval, h, epsilon, rg_res[:4])
+ad_res_less, table = adams_method(interval, h / 2, epsilon, rg_res_less[:4])
+errors = search_error_for_ad(ad_res, ad_res_less)
+for i in range(len(errors)):
+    table_finish[i].append(abs(errors[i]))
+print_table(table_finish, ('x', 'y', 'Error'))
