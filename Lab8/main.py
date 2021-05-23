@@ -23,24 +23,13 @@ def dfunction(x: float, y: float) -> float:
     return e ** (-a * x) * (y ** 2 + b)
 
 
-def show_plot(x_values: list, y_values: list) -> None:
-    """
-    Function for creating plots
-    :param x_values: our nodes
-    :param y_values: values at this nodes
-    :param newton_coeffs: coefficients for newton polynomial
-    :param spline_coeffs: coefficients for spline equations
-    :param indexes: dictionary with indexes for spline equations
-    :param cubic_spline: CubicSpline class from SciPy
-    :return: nothing to return
-    """
+def show_plot(x_values_1: list, y_values_1: list, x_values_2: list, y_values_2: list, labels: list) -> None:
     fig, ax = plt.subplots()
-    ax.plot(x_values, y_values, 'o', label='Data')
-    ax.plot(x_axis, [linear_function(x) for x in x_axis], label='Linear')
-    ax.legend(loc='lower left', ncol=2)
+    ax.plot(x_values_1, y_values_1, label=labels[0])
+    ax.plot(x_values_2, y_values_2, label=labels[1])
+    ax.legend(loc='upper left', ncol=2)
     plt.grid()
     plt.show()
-
 
 
 def runge_kutte_method(interval, h, epsilon, x0, y0):
@@ -113,7 +102,7 @@ def print_table(table: list, headers: tuple):
 
 
 print(template.substitute(string='Runge-kutta method'))
-rg_res= runge_kutte_method(interval, h, epsilon, x0, y0)
+rg_res = runge_kutte_method(interval, h, epsilon, x0, y0)
 rg_res_less = runge_kutte_method(interval, h / 2, epsilon, x0, y0)
 errors = search_error_for_ad(rg_res, rg_res_less)
 for i in range(1, len(errors)):
@@ -129,3 +118,5 @@ for i in range(len(errors)):
     else:
         ad_res[i].append(abs(errors[i]))
 print_table(ad_res, ('x', 'y', 'Error'))
+show_plot([el[0] for el in rg_res], [el[1] for el in rg_res], [el[0] for el in ad_res], [el[1] for el in ad_res], ['Runge-Kutta', 'Adams'])
+show_plot([el[0] for el in rg_res], [el[2] for el in rg_res], [el[0] for el in ad_res], [el[2] for el in ad_res], ['Runge-Kutta errors', 'Adams errors'])
