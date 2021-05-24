@@ -165,9 +165,16 @@ def search_error_for_adams(adams_results: list, adams_results_less: list) -> lis
     return errors
 
 
-def print_table(table: list, headers: tuple):
-    df = pd.DataFrame(table)
-    print(tabulate(df, headers=headers, tablefmt='github'))
+def print_table(table: list, headers: tuple) -> None:
+    """
+    Function for printing the table
+    :param table: values
+    :param headers: headers of the table
+    :return: nothing
+    """
+    dataframe = pd.DataFrame(table)
+    format_style = 'github'
+    print(tabulate(dataframe, headers=headers, tablefmt=format_style))
 
 
 def solve_np(x_axis, y0):
