@@ -200,26 +200,26 @@ def system_solver():
 
 
 print(template.substitute(string='Runge-kutta method'))
-rg_res = runge_kutte_method(interval, h, epsilon, x0, y0)
-rg_res_less = runge_kutte_method(interval, h / 2, epsilon, x0, y0)
-errors = search_error_for_adams(rg_res, rg_res_less)
-for i in range(1, len(errors)):
-    rg_res[i].append(abs(errors[i]))
-print_table(rg_res, ('x', 'y', 'Error'))
+runge_kutta_results = runge_kutte_method(interval, h, epsilon, x0, y0)
+runge_kutta_results_less = runge_kutte_method(interval, h / 2, epsilon, x0, y0)
+runge_kutta_errors = search_error_for_adams(runge_kutta_results, runge_kutta_results_less)
+for index in range(1, len(runge_kutta_errors)):
+    runge_kutta_results[index].append(abs(runge_kutta_errors[index]))
+print_table(runge_kutta_results, ('x', 'y', 'Error'))
 print(template.substitute(string='Adams method'))
-ad_res = adams_method(interval, h, epsilon, rg_res[:4])
-ad_res_less = adams_method(interval, h / 2, epsilon, rg_res_less[:4])
-errors = search_error_for_adams(ad_res, ad_res_less)
-for i in range(len(errors)):
-    if i < 4:
-        ad_res[i][2] = abs(errors[i])
+adams_results = adams_method(interval, h, epsilon, runge_kutta_results[:4])
+adams_results_less = adams_method(interval, h / 2, epsilon, runge_kutta_results_less[:4])
+adams_errors = search_error_for_adams(adams_results, adams_results_less)
+for index in range(len(adams_errors)):
+    if index < 4:
+        adams_results[index][2] = abs(adams_errors[index])
     else:
-        ad_res[i].append(abs(errors[i]))
-print_table(ad_res, ('x', 'y', 'Error'))
+        adams_results[index].append(abs(adams_errors[index]))
+print_table(adams_results, ('x', 'y', 'Error'))
 x_axis = np.arange(interval[0], interval[1] + 0.1, h)
-np_res = scipy_solver(x_axis, y0)
+scipy_results = scipy_solver(x_axis, y0)
 print(template.substitute(string='SciPy solution'))
-print_table([[x_axis[i], np_res[i]] for i in range(len(np_res))], ('x', 'y'))
-show_plot([el[0] for el in rg_res], [el[1] for el in rg_res], [el[0] for el in ad_res], [el[1] for el in ad_res], ['Runge-Kutta', 'Adams'])
-show_plot([el[0] for el in rg_res], [el[2] for el in rg_res], [el[0] for el in ad_res], [el[2] for el in ad_res], ['Runge-Kutta errors', 'Adams errors'])
+print_table([[x_axis[i], scipy_results[i]] for i in range(len(scipy_results))], ('x', 'y'))
+show_plot([el[0] for el in runge_kutta_results], [el[1] for el in runge_kutta_results], [el[0] for el in adams_results], [el[1] for el in adams_results], ['Runge-Kutta', 'Adams'])
+show_plot([el[0] for el in runge_kutta_results], [el[2] for el in runge_kutta_results], [el[0] for el in adams_results], [el[2] for el in adams_results], ['Runge-Kutta errors', 'Adams errors'])
 system_solver()
