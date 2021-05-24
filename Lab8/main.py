@@ -188,7 +188,7 @@ def scipy_solver(x_axis: list, first_y: float) -> list:
     return results
 
 
-def solve_system():
+def system_solver():
     y_axis = [0.1, 0]
     x_axis = np.linspace(0, 60, 100)
     results = odeint(system_function, y_axis, x_axis)
@@ -222,5 +222,4 @@ print(template.substitute(string='SciPy solution'))
 print_table([[x_axis[i], np_res[i]] for i in range(len(np_res))], ('x', 'y'))
 show_plot([el[0] for el in rg_res], [el[1] for el in rg_res], [el[0] for el in ad_res], [el[1] for el in ad_res], ['Runge-Kutta', 'Adams'])
 show_plot([el[0] for el in rg_res], [el[2] for el in rg_res], [el[0] for el in ad_res], [el[2] for el in ad_res], ['Runge-Kutta errors', 'Adams errors'])
-
-solve_system()
+system_solver()
