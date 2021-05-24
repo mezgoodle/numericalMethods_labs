@@ -63,7 +63,7 @@ def show_plot_for_system(x_axis: list, y_axis: list, labels: list) -> None:
     :param labels: labels on a plot
     :return: nothing to return
     """
-    plt.title('Portrait')
+    plt.title(labels[2])
     plt.xlabel(labels[0])
     plt.ylabel(labels[1])
     plt.grid()
@@ -194,9 +194,9 @@ def system_solver():
     results = odeint(system_function, y_axis, x_axis)
     first_y_results = results.transpose()[0]
     second_y_results = results.transpose()[1]
-    show_plot_for_system(x_axis, first_y_results, ['u<0>', 'u<1>'])
-    show_plot_for_system(x_axis, second_y_results, ['u<0>', 'u<2>'])
-    show_plot_for_system(first_y_results, second_y_results, ['u<1>', 'u<2>'])
+    show_plot_for_system(x_axis, first_y_results, ['u<0>', 'u<1>', 'First function'])
+    show_plot_for_system(x_axis, second_y_results, ['u<0>', 'u<2>', 'Second function'])
+    show_plot_for_system(first_y_results, second_y_results, ['u<1>', 'u<2>', 'Portrait'])
 
 
 print(template.substitute(string='Runge-kutta method'))
