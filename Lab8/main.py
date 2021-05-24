@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from string import Template
 from math import e
 
+# Constants
 n = 5
 a = b = 1 + 0.4 * n
 interval = [0, 4]
@@ -26,25 +27,47 @@ def dfunction(y: float, x: float) -> float:
 
 
 def system_function(y: list, x: float) -> list:
+    """
+    Main diff system
+    :param y: y-argument
+    :param x: x-argument
+    :return: list of results, tow arguments
+    """
     k = 10
     return [y[1], ((k - 10) / 10 * y[1]) - y[0]]
 
 
-def show_plot(x_values_1: list, y_values_1: list, x_values_2: list, y_values_2: list, labels: list) -> None:
+def show_plot(x_axis_1: list, y_axis_1: list, x_axis_2: list, y_axis_2: list, labels: list) -> None:
+    """
+    Function for showing plot
+    :param x_axis_1: x-values for the first function
+    :param y_axis_1: y-values for the first function
+    :param x_axis_2: x-values for the second function
+    :param y_axis_2: y-values for the second function
+    :param labels: labels on a plot
+    :return: nothing to return
+    """
     fig, ax = plt.subplots()
-    ax.plot(x_values_1, y_values_1, label=labels[0])
-    ax.plot(x_values_2, y_values_2, label=labels[1])
+    ax.plot(x_axis_1, y_axis_1, label=labels[0])
+    ax.plot(x_axis_2, y_axis_2, label=labels[1])
     ax.legend(loc='upper left', ncol=2)
     plt.grid()
     plt.show()
 
 
-def show_plot_for_system(x_values: list, y_values: list, labels: list) -> None:
+def show_plot_for_system(x_axis: list, y_axis: list, labels: list) -> None:
+    """
+    Function for showing plots for system
+    :param x_axis: x-values of the function
+    :param y_axis: y-values of the function
+    :param labels: labels on a plot
+    :return: nothing to return
+    """
     plt.title('Portrait')
     plt.xlabel(labels[0])
     plt.ylabel(labels[1])
     plt.grid()
-    plt.plot(x_values, y_values, 'k')
+    plt.plot(x_axis, y_axis, 'k')
     plt.show()
 
 
