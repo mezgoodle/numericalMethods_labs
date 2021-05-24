@@ -177,8 +177,14 @@ def print_table(table: list, headers: tuple) -> None:
     print(tabulate(dataframe, headers=headers, tablefmt=format_style))
 
 
-def solve_np(x_axis, y0):
-    results = odeint(dfunction, y0, x_axis)
+def scipy_solver(x_axis: list, first_y: float) -> list:
+    """
+    Solve the diff equation with SciPy
+    :param x_axis: x-values
+    :param first_y: known y-value
+    :return: list with results
+    """
+    results = odeint(dfunction, first_y, x_axis)
     return results
 
 
@@ -211,7 +217,7 @@ for i in range(len(errors)):
         ad_res[i].append(abs(errors[i]))
 print_table(ad_res, ('x', 'y', 'Error'))
 x_axis = np.arange(interval[0], interval[1] + 0.1, h)
-np_res = solve_np(x_axis, y0)
+np_res = scipy_solver(x_axis, y0)
 print(template.substitute(string='SciPy solution'))
 print_table([[x_axis[i], np_res[i]] for i in range(len(np_res))], ('x', 'y'))
 show_plot([el[0] for el in rg_res], [el[1] for el in rg_res], [el[0] for el in ad_res], [el[1] for el in ad_res], ['Runge-Kutta', 'Adams'])
