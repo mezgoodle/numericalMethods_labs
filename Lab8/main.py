@@ -1,5 +1,6 @@
 from tabulate import tabulate
 import pandas as pd
+
 import matplotlib.pyplot as plt
 from string import Template
 from math import e
@@ -13,7 +14,7 @@ epsilon = 10 ** (-1)
 template = Template('#' * 10 + ' $string ' + '#' * 10)
 
 
-def dfunction(x: float, y: float) -> float:
+def dfunction(y: float, x: float) -> float:
     """
     Main diff function
     :param x: x-argument
@@ -38,10 +39,10 @@ def runge_kutte_method(interval, h, epsilon, x0, y0):
     xi = x0
     yi = y0
     while xi < interval[1]:
-        k1 = h * dfunction(xi, yi)
-        k2 = h * dfunction(xi + h / 2, yi + k1 / 2)
-        k3 = h * dfunction(xi + h / 2, yi + k2 / 2)
-        k4 = h * dfunction(xi + h, yi + k3)
+        k1 = h * dfunction(yi, xi)
+        k2 = h * dfunction(yi + k1 / 2, xi + h / 2)
+        k3 = h * dfunction(yi + k2 / 2, xi + h / 2)
+        k4 = h * dfunction(yi + k3, xi + h)
         delta_y = (1.0 / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
         xi += h
         yi += delta_y
@@ -56,13 +57,13 @@ def adams_method(interval, h, epsilon, rg_res):
     i = 3
     step = h
     while i < ((interval[1] - interval[0]) / h):
-        k1 = dfunction(rg_res[i][0], rg_res[i][1])
-        k2 = dfunction(rg_res[i - 1][0], rg_res[i - 1][1])
-        k3 = dfunction(rg_res[i - 2][0], rg_res[i - 2][1])
-        k4 = dfunction(rg_res[i - 3][0], rg_res[i - 3][1])
+        k1 = dfunction(rg_res[i][1], rg_res[i][0])
+        k2 = dfunction(rg_res[i - 1][1], rg_res[i - 1][0])
+        k3 = dfunction(rg_res[i - 2][1], rg_res[i - 2][0])
+        k4 = dfunction(rg_res[i - 3][1], rg_res[i - 3][0])
         extra_y = rg_res[i][1] + h / 24 * (55 * k1 - 59 * k2 + 37 * k3 - 9 * k4)
         next_x = rg_res[i][0] + step
-        intra_y = rg_res[i][1] + h / 24 * (9 * dfunction(next_x, extra_y) + 19 * k1 - 5 * k2 + k3)
+        intra_y = rg_res[i][1] + h / 24 * (9 * dfunction(extra_y, next_x) + 19 * k1 - 5 * k2 + k3)
         fault = abs(intra_y - extra_y)
         if fault > epsilon:
             step / 2
@@ -77,10 +78,10 @@ def adams_method(interval, h, epsilon, rg_res):
 def search_error_for_rg(rg_res, h):
     errors = []
     for i in range(len(rg_res) - 1):
-        k1 = dfunction(rg_res[i][0], rg_res[i][1])
-        k2 = dfunction(rg_res[i][0] + h / 2, rg_res[i][1])
-        k3 = dfunction(rg_res[i][0] + h / 2, rg_res[i][1])
-        k4 = dfunction(rg_res[i][0] + h, rg_res[i][1])
+        k1 = dfunction(rg_res[i][1], rg_res[i][0])
+        k2 = dfunction(rg_res[i][1], rg_res[i][0] + h / 2)
+        k3 = dfunction(rg_res[i][1], rg_res[i][0] + h / 2)
+        k4 = dfunction(rg_res[i][1], rg_res[i][0] + h)
         delta_y = (k1 + 2 * k2 + 2 * k3 + k4) / 6
         right_part = (rg_res[i + 1][1] - rg_res[i][1]) / h
         error = delta_y - right_part
