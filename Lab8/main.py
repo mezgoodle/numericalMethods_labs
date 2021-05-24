@@ -1,6 +1,7 @@
 from tabulate import tabulate
 import pandas as pd
-
+from scipy.integrate import odeint
+import numpy as np
 import matplotlib.pyplot as plt
 from string import Template
 from math import e
@@ -102,6 +103,11 @@ def print_table(table: list, headers: tuple):
     print(tabulate(df, headers=headers, tablefmt='github'))
 
 
+def solve_np(x_axis, y0):
+    results = odeint(dfunction, y0, x_axis)
+    return results
+
+
 print(template.substitute(string='Runge-kutta method'))
 rg_res = runge_kutte_method(interval, h, epsilon, x0, y0)
 rg_res_less = runge_kutte_method(interval, h / 2, epsilon, x0, y0)
@@ -119,5 +125,9 @@ for i in range(len(errors)):
     else:
         ad_res[i].append(abs(errors[i]))
 print_table(ad_res, ('x', 'y', 'Error'))
+x_axis = np.arange(interval[0], interval[1] + 0.1, h)
+np_res = solve_np(x_axis, y0)
+print(template.substitute(string='SciPy solution'))
+print_table([[x_axis[i], np_res[i]] for i in range(len(np_res))], ('x', 'y'))
 show_plot([el[0] for el in rg_res], [el[1] for el in rg_res], [el[0] for el in ad_res], [el[1] for el in ad_res], ['Runge-Kutta', 'Adams'])
 show_plot([el[0] for el in rg_res], [el[2] for el in rg_res], [el[0] for el in ad_res], [el[2] for el in ad_res], ['Runge-Kutta errors', 'Adams errors'])
