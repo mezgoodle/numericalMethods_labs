@@ -39,6 +39,15 @@ def show_plot(x_values_1: list, y_values_1: list, x_values_2: list, y_values_2: 
     plt.show()
 
 
+def show_plot_for_system(x_values: list, y_values: list, labels: list) -> None:
+    plt.title('Portrait')
+    plt.xlabel(labels[0])
+    plt.ylabel(labels[1])
+    plt.grid()
+    plt.plot(x_values, y_values, 'k')
+    plt.show()
+
+
 def runge_kutte_method(interval, h, epsilon, x0, y0):
     table = []
     table.append([x0, y0, 0])
@@ -115,31 +124,13 @@ def solve_np(x_axis, y0):
 
 def solve_system():
     y_axis = [0.1, 0]
-    x_axis = np.linspace(0, 50, 100)
+    x_axis = np.linspace(0, 60, 100)
     results = odeint(system_function, y_axis, x_axis)
-    ys1 = results.transpose()[0]
-    ys2 = results.transpose()[1]
-    plt.figure(figsize=(10, 5))
-    plt.title('Фазовий портрет')
-    plt.xlabel("u<0>")
-    plt.ylabel("u<1>")
-    plt.grid()
-    plt.plot(x_axis, ys1, 'k')
-    plt.show()
-    plt.figure(figsize=(10, 5))
-    plt.title('Фазовий портрет')
-    plt.xlabel("u<0>")
-    plt.ylabel("u<2>")
-    plt.grid()
-    plt.plot(x_axis, ys2, 'k')
-    plt.show()
-    plt.figure(figsize=(10, 5))
-    plt.title('Фазовий портрет')
-    plt.xlabel("u<1>")
-    plt.ylabel("u<2>")
-    plt.grid()
-    plt.plot(ys1, ys2, 'k')
-    plt.show()
+    first_y_results = results.transpose()[0]
+    second_y_results = results.transpose()[1]
+    show_plot_for_system(x_axis, first_y_results, ['u<0>', 'u<1>'])
+    show_plot_for_system(x_axis, second_y_results, ['u<0>', 'u<2>'])
+    show_plot_for_system(first_y_results, second_y_results, ['u<1>', 'u<2>'])
 
 
 # print(template.substitute(string='Runge-kutta method'))
