@@ -25,6 +25,11 @@ def dfunction(y: float, x: float) -> float:
     return e ** (-a * x) * (y ** 2 + b)
 
 
+def system_function(y: list, x: float) -> list:
+    k = 10
+    return [y[1], ((k - 10) / 10 * y[1]) - y[0]]
+
+
 def show_plot(x_values_1: list, y_values_1: list, x_values_2: list, y_values_2: list, labels: list) -> None:
     fig, ax = plt.subplots()
     ax.plot(x_values_1, y_values_1, label=labels[0])
@@ -108,26 +113,57 @@ def solve_np(x_axis, y0):
     return results
 
 
-print(template.substitute(string='Runge-kutta method'))
-rg_res = runge_kutte_method(interval, h, epsilon, x0, y0)
-rg_res_less = runge_kutte_method(interval, h / 2, epsilon, x0, y0)
-errors = search_error_for_ad(rg_res, rg_res_less)
-for i in range(1, len(errors)):
-    rg_res[i].append(abs(errors[i]))
-print_table(rg_res, ('x', 'y', 'Error'))
-print(template.substitute(string='Adams method'))
-ad_res = adams_method(interval, h, epsilon, rg_res[:4])
-ad_res_less = adams_method(interval, h / 2, epsilon, rg_res_less[:4])
-errors = search_error_for_ad(ad_res, ad_res_less)
-for i in range(len(errors)):
-    if i < 4:
-        ad_res[i][2] = abs(errors[i])
-    else:
-        ad_res[i].append(abs(errors[i]))
-print_table(ad_res, ('x', 'y', 'Error'))
-x_axis = np.arange(interval[0], interval[1] + 0.1, h)
-np_res = solve_np(x_axis, y0)
-print(template.substitute(string='SciPy solution'))
-print_table([[x_axis[i], np_res[i]] for i in range(len(np_res))], ('x', 'y'))
-show_plot([el[0] for el in rg_res], [el[1] for el in rg_res], [el[0] for el in ad_res], [el[1] for el in ad_res], ['Runge-Kutta', 'Adams'])
-show_plot([el[0] for el in rg_res], [el[2] for el in rg_res], [el[0] for el in ad_res], [el[2] for el in ad_res], ['Runge-Kutta errors', 'Adams errors'])
+def solve_system():
+    y_axis = [0.1, 0]
+    x_axis = np.linspace(0, 50, 100)
+    results = odeint(system_function, y_axis, x_axis)
+    ys1 = results.transpose()[0]
+    ys2 = results.transpose()[1]
+    plt.figure(figsize=(10, 5))
+    plt.title('Фазовий портрет')
+    plt.xlabel("u<0>")
+    plt.ylabel("u<1>")
+    plt.grid()
+    plt.plot(x_axis, ys1, 'k')
+    plt.show()
+    plt.figure(figsize=(10, 5))
+    plt.title('Фазовий портрет')
+    plt.xlabel("u<0>")
+    plt.ylabel("u<2>")
+    plt.grid()
+    plt.plot(x_axis, ys2, 'k')
+    plt.show()
+    plt.figure(figsize=(10, 5))
+    plt.title('Фазовий портрет')
+    plt.xlabel("u<1>")
+    plt.ylabel("u<2>")
+    plt.grid()
+    plt.plot(ys1, ys2, 'k')
+    plt.show()
+
+
+# print(template.substitute(string='Runge-kutta method'))
+# rg_res = runge_kutte_method(interval, h, epsilon, x0, y0)
+# rg_res_less = runge_kutte_method(interval, h / 2, epsilon, x0, y0)
+# errors = search_error_for_ad(rg_res, rg_res_less)
+# for i in range(1, len(errors)):
+#     rg_res[i].append(abs(errors[i]))
+# print_table(rg_res, ('x', 'y', 'Error'))
+# print(template.substitute(string='Adams method'))
+# ad_res = adams_method(interval, h, epsilon, rg_res[:4])
+# ad_res_less = adams_method(interval, h / 2, epsilon, rg_res_less[:4])
+# errors = search_error_for_ad(ad_res, ad_res_less)
+# for i in range(len(errors)):
+#     if i < 4:
+#         ad_res[i][2] = abs(errors[i])
+#     else:
+#         ad_res[i].append(abs(errors[i]))
+# print_table(ad_res, ('x', 'y', 'Error'))
+# x_axis = np.arange(interval[0], interval[1] + 0.1, h)
+# np_res = solve_np(x_axis, y0)
+# print(template.substitute(string='SciPy solution'))
+# print_table([[x_axis[i], np_res[i]] for i in range(len(np_res))], ('x', 'y'))
+# show_plot([el[0] for el in rg_res], [el[1] for el in rg_res], [el[0] for el in ad_res], [el[1] for el in ad_res], ['Runge-Kutta', 'Adams'])
+# show_plot([el[0] for el in rg_res], [el[2] for el in rg_res], [el[0] for el in ad_res], [el[2] for el in ad_res], ['Runge-Kutta errors', 'Adams errors'])
+
+solve_system()
