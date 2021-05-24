@@ -151,10 +151,16 @@ def search_error_for_runge_kutta(runge_kutta_results: list, h_value: float) -> l
     return errors
 
 
-def search_error_for_ad(ad_res, ad_res_less):
+def search_error_for_adams(adams_results: list, adams_results_less: list) -> list:
+    """
+    Function for calculating errors for Adams method
+    :param adams_results: results from this method
+    :param adams_results_less: results from this method with divided step
+    :return: list with errors
+    """
     errors = []
-    for i in range(len(ad_res)):
-        error = (ad_res[i][1] - ad_res_less[i * 2][1]) / (16 - 1)
+    for index in range(len(adams_results)):
+        error = (adams_results[index][1] - adams_results_less[index * 2][1]) / (16 - 1)
         errors.append(error)
     return errors
 
@@ -183,14 +189,14 @@ def solve_system():
 print(template.substitute(string='Runge-kutta method'))
 rg_res = runge_kutte_method(interval, h, epsilon, x0, y0)
 rg_res_less = runge_kutte_method(interval, h / 2, epsilon, x0, y0)
-errors = search_error_for_ad(rg_res, rg_res_less)
+errors = search_error_for_adams(rg_res, rg_res_less)
 for i in range(1, len(errors)):
     rg_res[i].append(abs(errors[i]))
 print_table(rg_res, ('x', 'y', 'Error'))
 print(template.substitute(string='Adams method'))
 ad_res = adams_method(interval, h, epsilon, rg_res[:4])
 ad_res_less = adams_method(interval, h / 2, epsilon, rg_res_less[:4])
-errors = search_error_for_ad(ad_res, ad_res_less)
+errors = search_error_for_adams(ad_res, ad_res_less)
 for i in range(len(errors)):
     if i < 4:
         ad_res[i][2] = abs(errors[i])
