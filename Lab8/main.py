@@ -100,26 +100,35 @@ def runge_kutte_method(limits: list, h_value: float, epsilon_value: float, first
     return results
 
 
-def adams_method(interval, h, epsilon, rg_res):
-    i = 3
-    step = h
-    while i < ((interval[1] - interval[0]) / h):
-        k1 = dfunction(rg_res[i][1], rg_res[i][0])
-        k2 = dfunction(rg_res[i - 1][1], rg_res[i - 1][0])
-        k3 = dfunction(rg_res[i - 2][1], rg_res[i - 2][0])
-        k4 = dfunction(rg_res[i - 3][1], rg_res[i - 3][0])
-        extra_y = rg_res[i][1] + h / 24 * (55 * k1 - 59 * k2 + 37 * k3 - 9 * k4)
-        next_x = rg_res[i][0] + step
-        intra_y = rg_res[i][1] + h / 24 * (9 * dfunction(extra_y, next_x) + 19 * k1 - 5 * k2 + k3)
+def adams_method(limits: list, h_value: float, epsilon_value: float, runge_kutta_results: list) -> list:
+    """
+    Implementation of the Adams method
+    :param limits: limits of x-values
+    :param h_value: step
+    :param epsilon_value: alue for controlling the fault
+    :param runge_kutta_results: known results from the previous method
+    :return: list with x and y values
+    """
+    index = 3
+    step_value = h_value
+    number_of_steps = ((limits[1] - limits[0]) / h_value)
+    while index < number_of_steps:
+        k1 = dfunction(runge_kutta_results[index][1], runge_kutta_results[index][0])
+        k2 = dfunction(runge_kutta_results[index - 1][1], runge_kutta_results[index - 1][0])
+        k3 = dfunction(runge_kutta_results[index - 2][1], runge_kutta_results[index - 2][0])
+        k4 = dfunction(runge_kutta_results[index - 3][1], runge_kutta_results[index - 3][0])
+        extra_y = runge_kutta_results[index][1] + h_value / 24 * (55 * k1 - 59 * k2 + 37 * k3 - 9 * k4)
+        next_x = runge_kutta_results[index][0] + step_value
+        intra_y = runge_kutta_results[index][1] + h_value / 24 * (9 * dfunction(extra_y, next_x) + 19 * k1 - 5 * k2 + k3)
         fault = abs(intra_y - extra_y)
-        if fault > epsilon:
-            step / 2
+        if fault > epsilon_value:
+            step_value / 2
         if extra_y == intra_y:
-            rg_res.append([next_x, extra_y])
+            runge_kutta_results.append([next_x, extra_y])
         else:
-            rg_res.append([next_x, intra_y])
-        i += 1
-    return rg_res
+            runge_kutta_results.append([next_x, intra_y])
+        index += 1
+    return runge_kutta_results
 
 
 def search_error_for_rg(rg_res, h):
