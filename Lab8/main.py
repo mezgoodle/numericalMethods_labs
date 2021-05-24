@@ -71,24 +71,33 @@ def show_plot_for_system(x_axis: list, y_axis: list, labels: list) -> None:
     plt.show()
 
 
-def runge_kutte_method(interval, h, epsilon, x0, y0):
-    table = []
-    table.append([x0, y0, 0])
-    xi = x0
-    yi = y0
-    while xi < interval[1]:
-        k1 = h * dfunction(yi, xi)
-        k2 = h * dfunction(yi + k1 / 2, xi + h / 2)
-        k3 = h * dfunction(yi + k2 / 2, xi + h / 2)
-        k4 = h * dfunction(yi + k3, xi + h)
+def runge_kutte_method(limits: list, h_value: float, epsilon_value: float, first_x: float, first_y: float) -> list:
+    """
+    Implementation of the Runge-Kutta method
+    :param limits: limits of x-values
+    :param h_value: step
+    :param epsilon_value: value for controlling the fault
+    :param first_x: known x-value
+    :param first_y: known y-value
+    :return: list with x and y values
+    """
+    results = []
+    results.append([first_x, first_y, 0])
+    current_x = first_x
+    current_y = first_y
+    while current_x < limits[1]:
+        k1 = h_value * dfunction(current_y, current_x)
+        k2 = h_value * dfunction(current_y + k1 / 2, current_x + h_value / 2)
+        k3 = h_value * dfunction(current_y + k2 / 2, current_x + h_value / 2)
+        k4 = h_value * dfunction(current_y + k3, current_x + h_value)
         delta_y = (1.0 / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
-        xi += h
-        yi += delta_y
+        current_x += h_value
+        current_y += delta_y
         fault = abs((k2 - k3) / (k1 - k2))
-        if fault > epsilon:
-            h /= 2
-        table.append([xi, yi])
-    return table
+        if fault > epsilon_value:
+            h_value /= 2
+        results.append([current_x, current_y])
+    return results
 
 
 def adams_method(interval, h, epsilon, rg_res):
