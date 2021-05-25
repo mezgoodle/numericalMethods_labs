@@ -151,16 +151,17 @@ def search_error_for_runge_kutta(runge_kutta_results: list, h_value: float) -> l
     return errors
 
 
-def search_error_for_adams(adams_results: list, adams_results_less: list) -> list:
+def search_error_for_adams(adams_results: list, adams_results_less: list, m: int) -> list:
     """
     Function for calculating errors for Adams method
     :param adams_results: results from this method
     :param adams_results_less: results from this method with divided step
+    :param m: value for the fault
     :return: list with errors
     """
     errors = []
     for index in range(len(adams_results)):
-        error = (adams_results[index][1] - adams_results_less[index * 2][1]) / (16 - 1)
+        error = (adams_results[index][1] - adams_results_less[index * 2][1]) / (2 ** m - 1)
         errors.append(error)
     return errors
 
@@ -190,7 +191,7 @@ def scipy_solver(x_axis: list, first_y: float) -> list:
 
 def system_solver():
     y_axis = [0.1, 0]
-    x_axis = np.linspace(0, 60, 100)
+    x_axis = np.linspace(0, 40, 100)
     results = odeint(system_function, y_axis, x_axis)
     first_y_results = results.transpose()[0]
     second_y_results = results.transpose()[1]
@@ -202,14 +203,14 @@ def system_solver():
 print(template.substitute(string='Runge-kutta method'))
 runge_kutta_results = runge_kutte_method(interval, h, epsilon, x0, y0)
 runge_kutta_results_less = runge_kutte_method(interval, h / 2, epsilon, x0, y0)
-runge_kutta_errors = search_error_for_adams(runge_kutta_results, runge_kutta_results_less)
+runge_kutta_errors = search_error_for_adams(runge_kutta_results, runge_kutta_results_less, 5)
 for index in range(1, len(runge_kutta_errors)):
     runge_kutta_results[index].append(abs(runge_kutta_errors[index]))
 print_table(runge_kutta_results, ('x', 'y', 'Error'))
 print(template.substitute(string='Adams method'))
 adams_results = adams_method(interval, h, epsilon, runge_kutta_results[:4])
 adams_results_less = adams_method(interval, h / 2, epsilon, runge_kutta_results_less[:4])
-adams_errors = search_error_for_adams(adams_results, adams_results_less)
+adams_errors = search_error_for_adams(adams_results, adams_results_less, 4)
 for index in range(len(adams_errors)):
     if index < 4:
         adams_results[index][2] = abs(adams_errors[index])
