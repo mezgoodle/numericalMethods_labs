@@ -10,4 +10,4 @@ In this work I did algorithm to find out Newton polynomial and Cubic Spline inte
 
 ## Libraries
 
-In this work I used [numpy](https://github.com/numpy/numpy), [scipy](https://www.scipy.org/) and [matplotlib](https://matplotlib.org/).
+In this work I used [NumPy](https://github.com/numpy/numpy), [SciPy](https://www.scipy.org/) and [matplotlib](https://matplotlib.org/).
