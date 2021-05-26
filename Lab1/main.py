@@ -1,9 +1,10 @@
-import numpy as np
-from matplotlib import cm
-import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
 import cmath
 import math
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import cm
+
 from checker import main
 
 """Simple functions area start"""

@@ -24,6 +24,6 @@ In this work I have to do similar functions to Mathcad functions. So you can see
 
 In this work I used two libraries:
 
-- [numpy](https://github.com/numpy/numpy)
+- [NumPy](https://github.com/numpy/numpy)
 
 - [matplotlib](https://github.com/matplotlib/matplotlib)
