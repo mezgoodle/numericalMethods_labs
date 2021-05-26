@@ -8,4 +8,4 @@ In this work I did two algorithms to solve system of linear matrices:
 
 ## Libraries
 
-In this work I used [numpy](https://github.com/numpy/numpy) to check my answers.
+In this work I used [NumPy](https://github.com/numpy/numpy) to check my answers.
