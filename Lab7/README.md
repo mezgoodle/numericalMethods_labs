@@ -10,4 +10,4 @@ In this work I did algorithm for numerical functions integration:
 
 ## Libraries
 
-In this work I used [scipy](https://www.scipy.org/).
+In this work I used [SciPy](https://www.scipy.org/).
