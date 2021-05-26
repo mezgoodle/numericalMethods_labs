@@ -10,4 +10,4 @@ In this work I did algorithm to find out the roots of non-linear equations:
 
 ## Libraries
 
-In this work I used [numpy](https://github.com/numpy/numpy), [scipy](https://www.scipy.org/) and [matplotlib](https://matplotlib.org/).
+In this work I used [NumPy](https://github.com/numpy/numpy), [SciPy](https://www.scipy.org/) and [matplotlib](https://matplotlib.org/).
