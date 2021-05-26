@@ -13,6 +13,8 @@ There are main files, that used in every lab
 
 * [*.py](https://github.com/mezgoodle/numericalMethods_labs/blob/master/Lab1/main.py) - Main file, where program is set.
 
+* [*.pdf](https://github.com/mezgoodle/numericalMethods_labs/blob/master/Lab1/Lab1%20Zavalniuk%20Maxim%20IP-93.pdf) - Document with the results.(_ukrainian_)
+
 * [checker](https://github.com/mezgoodle/numericalMethods_labs/blob/master/checker/main.py) - File, that helps me to compare data from functions, which there aren't in NumPy.
 
 
