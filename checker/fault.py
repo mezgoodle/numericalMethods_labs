@@ -1,4 +1,3 @@
-"""Help function to get fault"""
 from math import sqrt
 
 
