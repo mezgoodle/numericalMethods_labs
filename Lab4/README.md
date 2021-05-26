@@ -10,4 +10,4 @@ In this work I did algorithm to find out self numbers and vectors of matrix:
 
 ## Libraries
 
-In this work I used [numpy](https://github.com/numpy/numpy) to check my answers.
+In this work I used [NumPy](https://github.com/numpy/numpy) to check my answers.

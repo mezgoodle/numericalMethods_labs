@@ -1,9 +1,9 @@
-from string import Template
-from checker import fault
-from checker.template import template
+from typing import Tuple
 
 import numpy as np
-from typing import Tuple
+
+from checker import fault
+from checker.template import template
 
 np.set_printoptions(suppress=True)
 
