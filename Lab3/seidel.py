@@ -4,9 +4,6 @@ from checker.fault import get_fault
 np.set_printoptions(suppress=True)
 
 
-# Defining our function as seidel which takes 3 arguments
-# as A matrix, Solution and B matrix
-
 def seidel(matrix_a: list, vector_b: list, vector_x: list) -> list:
     """
     Seidel algorithm part
@@ -29,7 +26,7 @@ def seidel(matrix_a: list, vector_b: list, vector_x: list) -> list:
 
 def solve(matrix_a: list, vector_b: list, vector_x: list, eps=10 ** (-6)) -> list:
     """
-    Main funtion
+    Main function
     :param matrix_a: start matrix
     :param vector_b: start vector
     :param vector_x: solution vector
